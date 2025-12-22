@@ -5,11 +5,9 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 
 ## Project Structure
 - "include/" : header files (".hpp")
--- abc
--- def
+    - abc
 - "src/" : source files (".cpp")
--- ghi
--- jkl
+    - def
 - "test/" : unit tests
 - "CMakeLists.txt" : build configuration
 - "doctest.h" : testing framework
