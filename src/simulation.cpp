@@ -36,7 +36,7 @@ void Simulation::evolve()
   double y_abs = y_rel_ * A_ / B_;
   double H     = (x_abs > 0 && y_abs > 0) ? compute_H(x_abs, y_abs)
                                           : std::numeric_limits<double>::infinity();
-  states_.push_back({x_abs, y_abs, H});
+  states_.push_back({x_abs, y_abs, H}); 
 }
 
 

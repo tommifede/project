@@ -17,7 +17,7 @@ public:
   struct State_rel
   {
     double x_rel;
-    double y_rel;
+    double y_rel; 
   };
   Simulation(double dt, double A, double B, double C, double D, double x0 = 0.,
              double y0 = 0.);
