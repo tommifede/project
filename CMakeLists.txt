@@ -50,7 +50,7 @@ if (BUILD_TESTING)
   # aggiungi l'eseguibile progetto.t
   add_executable(project_test src/simulation.cpp test/simulation_test.cpp)
   # include directory (per header e doctest.h)
-  target_include_directories(project_tests PRIVATE 
+  target_include_directories(project_test PRIVATE 
     include
     ${CMAKE_CURRENT_SOURCE_DIR})
   # aggiungi l'eseguibile progetto.t alla lista dei test
