@@ -5,13 +5,17 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 
 ## Project Structure
 - **include/**: header files
+    - *io.hpp*
     - *namespace.hpp*
-    - *simulation.hpp*
+    - *output.hpp*
     - *renderer.hpp*
+    - *simulation.hpp*
+- **io/**: input/output files
+    - *output.cpp*
 - **src/**: source files
-    - *simulation.cpp*
-    - *renderer.cpp*
     - *main.cpp*
+    - *renderer.cpp*
+    - *simulation.cpp*
 - **test/**: unit tests
     - *simulation_test.cpp*
 - *CMakeLists.txt*: build configuration
