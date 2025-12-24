@@ -2,7 +2,7 @@
 #define OUTPUT_HPP
 
 #include "io.hpp"
-#include "../src/simulation.hpp"
+#include "simulation.hpp"
 #include <fstream>
 #include <string>
 

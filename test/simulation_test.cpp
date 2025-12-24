@@ -1,7 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
-#include "../src/simulation.hpp"
+#include "../include/simulation.hpp"
 #include <cmath>
 
 TEST_CASE("Simulation constructor works and initialize correctly")

@@ -1,6 +1,6 @@
-#include "renderer.hpp"
-#include "simulation.hpp"
-#include "../io/output.hpp"
+#include "../include/renderer.hpp"
+#include "../include/simulation.hpp"
+#include "../include/output.hpp"
 #include <SFML/Graphics.hpp>
 #include <string>
 
