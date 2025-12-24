@@ -1,63 +1,9 @@
 #include "simulation.hpp"
 #include <cmath>
+#include <fstream>
 #include <iostream>
 
 namespace lotka_volterra {
-Simulation::Simulation(double dt, double A, double B, double C, double D,
-                       double x0, double y0)
-    : dt_{dt}
-    , A_{A}
-    , B_{B}
-    , C_{C}
-    , D_{D}
-    , x_rel_{x0 * C / D}
-    , y_rel_{y0 * B / A}
-{
-  check_parameters(dt, A, B, C, D, x0, y0);
-  states_.push_back({x0, y0, compute_H(x0, y0)});
-}
-
-int Simulation::steps() const
-{
-  return static_cast<int>(states_.size());
-}
-
-Simulation::State const& Simulation::state_at(std::size_t i) const
-{
-  return states_.at(i);
-}
-
-void Simulation::evolve()
-{
-  State const& last_state = states_.back();
-  x_rel_                  = last_state.x * C_ / D_;
-  y_rel_                  = last_state.y * B_ / A_;
-  integrate();
-  double x_abs = x_rel_ * D_ / C_;
-  double y_abs = y_rel_ * A_ / B_;
-  states_.push_back({x_abs, y_abs, compute_H(x_abs, y_abs)});
-}
-
-void Simulation::evolve_time(double T)
-{
-  double n = T / dt_;
-  if (std::abs(n - std::round(n)) > 1e-8) {
-    throw std::invalid_argument("T must be multiple of dt");
-  }
-  const int tot_steps = steps() + static_cast<int>(std::round(n));
-  for (int i = steps(); i < tot_steps; ++i) {
-    evolve();
-  }
-}
-
-void Simulation::evolve_steps(int add_steps)
-{
-  const int tot_steps = steps() + add_steps;
-  for (int i = steps(); i < tot_steps; ++i) {
-    evolve();
-  }
-}
-
 void Simulation::check_parameters(double dt, double A, double B, double C,
                                   double D, double x0, double y0) const
 {
@@ -91,5 +37,61 @@ double Simulation::compute_H(double x, double y) const
                ? (-D_ * std::log(x) + C_ * x + B_ * y - A_ * std::log(y))
                : std::numeric_limits<double>::infinity();
   return H;
+}
+
+
+Simulation::Simulation(double dt, double A, double B, double C, double D,
+                       double x0, double y0)
+    : dt_{dt}
+    , A_{A}
+    , B_{B}
+    , C_{C}
+    , D_{D}
+    , x_rel_{x0 * C / D}
+    , y_rel_{y0 * B / A}
+{
+  check_parameters(dt, A, B, C, D, x0, y0);
+  states_.push_back({x0, y0, compute_H(x0, y0)});
+}
+
+int Simulation::steps() const
+{
+  return static_cast<int>(states_.size());
+}
+
+State const& Simulation::state_at(int i) const
+{
+  return states_.at(static_cast<std::size_t>(i));
+}
+
+void Simulation::evolve()
+{
+  State const& last_state = states_.back();
+  x_rel_                  = last_state.x * C_ / D_;
+  y_rel_                  = last_state.y * B_ / A_;
+  integrate();
+  double x_abs = x_rel_ * D_ / C_;
+  double y_abs = y_rel_ * A_ / B_;
+  states_.push_back({x_abs, y_abs, compute_H(x_abs, y_abs)});
+}
+
+void Simulation::evolve_time(double T)
+{
+  double n = T / dt_;
+  if (std::abs(n - std::round(n)) > 1e-8) {
+    throw std::invalid_argument("T must be multiple of dt");
+  }
+  const int tot_steps = steps() + static_cast<int>(std::round(n));
+  for (int i = steps(); i < tot_steps; ++i) {
+    evolve();
+  }
+}
+
+void Simulation::evolve_steps(int add_steps)
+{
+  const int tot_steps = steps() + add_steps;
+  for (int i = steps(); i < tot_steps; ++i) {
+    evolve();
+  }
 }
 } // namespace lotka_volterra

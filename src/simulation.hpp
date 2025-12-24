@@ -5,25 +5,14 @@
 #include <vector>
 
 namespace lotka_volterra {
+struct State
+{
+  double x;
+  double y;
+  double H;
+};
 class Simulation
 {
-public:
-  struct State
-  {
-    double x;
-    double y;
-    double H;
-  };
-
-  Simulation(double dt, double A, double B, double C, double D, double x0 = 0.,
-             double y0 = 0.);
-
-  int steps() const;
-  State const& state_at(std::size_t i) const;
-  void evolve();
-  void evolve_time(double T);
-  void evolve_steps(int steps);
-
 private:
   double dt_;
   double A_;
@@ -38,6 +27,16 @@ private:
                         double x0, double y0) const;
   void integrate();
   double compute_H(double x, double y) const;
+
+public:
+  Simulation(double dt, double A, double B, double C, double D, double x0 = 0.,
+             double y0 = 0.);
+
+  int steps() const;
+  State const& state_at(int i) const;
+  void evolve();
+  void evolve_time(double T);
+  void evolve_steps(int steps);
 };
 } // namespace lotka_volterra
 
