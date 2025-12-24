@@ -1,8 +1,6 @@
 #include "simulation.hpp"
 #include <cmath>
-#include <cstdlib>
 #include <iostream>
-#include <limits>
 
 namespace lotka_volterra {
 Simulation::Simulation(double dt, double A, double B, double C, double D,
@@ -14,49 +12,48 @@ Simulation::Simulation(double dt, double A, double B, double C, double D,
     , D_{D}
     , x_rel_{x0 * C / D}
     , y_rel_{y0 * B / A}
-    , steps_{1}
 {
   check_parameters(dt, A, B, C, D, x0, y0);
   states_.push_back({x0, y0, compute_H(x0, y0)});
 }
 
-int Simulation::GetSteps() const
+int Simulation::steps() const
 {
   return static_cast<int>(states_.size());
 }
 
-Simulation::State const& Simulation::GetState(std::size_t i) const
+Simulation::State const& Simulation::state_at(std::size_t i) const
 {
   return states_.at(i);
 }
 
 void Simulation::evolve()
 {
-  State const& state = states_.back();
-  x_rel_             = state.x * C_ / D_;
-  y_rel_             = state.y * B_ / A_;
+  State const& last_state = states_.back();
+  x_rel_                  = last_state.x * C_ / D_;
+  y_rel_                  = last_state.y * B_ / A_;
   integrate();
   double x_abs = x_rel_ * D_ / C_;
   double y_abs = y_rel_ * A_ / B_;
   states_.push_back({x_abs, y_abs, compute_H(x_abs, y_abs)});
-  steps_ = GetSteps();
 }
 
-void Simulation::evolve(double T)
+void Simulation::evolve_time(double T)
 {
-  if (std::fmod(T, dt_) > 1e-8) {
+  double n = T / dt_;
+  if (std::abs(n - std::round(n)) > 1e-8) {
     throw std::invalid_argument("T must be multiple of dt");
   }
-  const int tot_steps = steps_ + static_cast<int>(std::round(T / dt_));
-  for (int i = steps_; i < tot_steps; ++i) {
+  const int tot_steps = steps() + static_cast<int>(std::round(n));
+  for (int i = steps(); i < tot_steps; ++i) {
     evolve();
   }
 }
 
-void Simulation::evolve(int steps)
+void Simulation::evolve_steps(int add_steps)
 {
-  const int tot_steps = steps_ + steps;
-  for (int i = steps_; i < tot_steps; ++i) {
+  const int tot_steps = steps() + add_steps;
+  for (int i = steps(); i < tot_steps; ++i) {
     evolve();
   }
 }
@@ -67,7 +64,7 @@ void Simulation::check_parameters(double dt, double A, double B, double C,
   if (dt <= 0.) {
     throw std::invalid_argument("dt must be > 0");
   }
-  if (dt >= 0.01 || dt <= 0.0001) {
+  if (dt > 0.01 || dt < 0.0001) {
     throw std::invalid_argument("dt must be between 0.0001 and 0.01");
   }
   if (A <= 0. || B <= 0. || C <= 0. || D <= 0.) {

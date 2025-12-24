@@ -2,7 +2,6 @@
 #define SIMULATION_HPP
 
 #include "namespace.hpp"
-#include <cstddef>
 #include <vector>
 
 namespace lotka_volterra {
@@ -19,11 +18,11 @@ public:
   Simulation(double dt, double A, double B, double C, double D, double x0 = 0.,
              double y0 = 0.);
 
-  int GetSteps() const;
-  State const& GetState(std::size_t i) const;
+  int steps() const;
+  State const& state_at(std::size_t i) const;
   void evolve();
-  void evolve(double T);
-  void evolve(int steps);
+  void evolve_time(double T);
+  void evolve_steps(int steps);
 
 private:
   double dt_;
@@ -34,7 +33,6 @@ private:
   double x_rel_;
   double y_rel_;
   std::vector<State> states_;
-  int steps_;
 
   void check_parameters(double dt, double A, double B, double C, double D,
                         double x0, double y0) const;
