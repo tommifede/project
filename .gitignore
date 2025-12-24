@@ -20,4 +20,7 @@ __MACOSX/
 *.swo
 *.vscode/
 
+# File di output
+*.csv
+
 pf2024.pdf
