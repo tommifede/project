@@ -31,17 +31,21 @@ int main()
     window1.display();
   } */
 
-  sf::RenderWindow window2(sf::VideoMode(width, height), "Lotka-Volterra 2");
+  sf::RenderWindow window(sf::VideoMode(width, height), "Lotka-Volterra");
 
-  lotka_volterra::Simulation simulation2(0.01, 2., 0.1, 0.1, 1., 8, 10.);
+  // lotka_volterra::Simulation simulation1(0.0001, 2., 0.1, 0.1, 1., 5.5, 10.);
+  // simulation1.evolve_time(100.);
+  // lotka_volterra::Renderer renderer1(width, height);
 
-  int step = 0;
+  lotka_volterra::Simulation simulation2(0.01, 2., 0.1, 0.1, 1., 9.9, 10.);
   lotka_volterra::Renderer renderer2(width, height);
-  while (window2.isOpen()) {
+
+  std::size_t step = 0;
+  while (window.isOpen()) {
     sf::Event event;
-    while (window2.pollEvent(event)) {
+    while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed)
-        window2.close();
+        window.close();
     }
 
     if (step + 1 < simulation2.steps())
@@ -49,13 +53,18 @@ int main()
     else
       simulation2.evolve();
 
-    window2.clear(sf::Color::White);
-    renderer2.draw_axes(window2, width, height);
-    renderer2.draw_ticks(window2, width, height);
-    renderer2.draw(window2, simulation2, step);
-    window2.display();
-  }
-  io::output_csv(simulation2, "trajectory2.csv");
+    window.clear(sf::Color::White);
 
+    // renderer1.draw_axes(window, width, height);
+    // renderer1.draw_ticks(window, width, height);
+    // renderer1.draw(window, simulation1);
+
+    // renderer2.draw_axes(window, width, height);
+    // renderer2.draw_ticks(window, width, height);
+    renderer2.draw(window, simulation2, step);
+    window.display();
+  }
+  // io::output_csv(simulation1, "trajectory1.csv");
+  io::output_csv(simulation2, "trajectory2.csv");
   return 0;
 }

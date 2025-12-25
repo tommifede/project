@@ -54,14 +54,22 @@ Simulation::Simulation(double dt, double A, double B, double C, double D,
   states_.push_back({x0, y0, compute_H(x0, y0)});
 }
 
-int Simulation::steps() const
+double const& Simulation::GetPar(std::size_t i) const
 {
-  return static_cast<int>(states_.size());
+  if (i > 3) {
+    throw std::invalid_argument("NO");
+  }
+  return pars_[i];
 }
 
-State const& Simulation::state_at(int i) const
+std::size_t Simulation::steps() const
 {
-  return states_.at(static_cast<std::size_t>(i));
+  return states_.size();
+}
+
+State const& Simulation::state_at(std::size_t i) const
+{
+  return states_.at(i);
 }
 
 void Simulation::evolve()
@@ -81,16 +89,20 @@ void Simulation::evolve_time(double T)
   if (std::abs(n - std::round(n)) > 1e-8) {
     throw std::invalid_argument("T must be multiple of dt");
   }
-  const int tot_steps = steps() + static_cast<int>(std::round(n));
-  for (int i = steps(); i < tot_steps; ++i) {
-    evolve();
+  std::size_t const tot_steps =
+      steps() + static_cast<std::size_t>(std::round(n));
+  for (std::size_t i = steps(); i < tot_steps; ++i) {
+    evolve(); // MODIFICARE CON evolve_steps
   }
 }
 
-void Simulation::evolve_steps(int add_steps)
+void Simulation::evolve_steps(std::size_t add_steps)
 {
-  const int tot_steps = steps() + add_steps;
-  for (int i = steps(); i < tot_steps; ++i) {
+  /* std::size_t const tot_steps = steps() + add_steps;
+  for (std::size_t i = steps(); i < tot_steps; ++i) {
+    evolve();
+  } */
+  for (std::size_t i = 0; i < add_steps; ++i) {
     evolve();
   }
 }
