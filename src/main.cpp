@@ -2,69 +2,72 @@
 #include "../include/renderer.hpp"
 #include "../include/simulation.hpp"
 #include <SFML/Graphics.hpp>
+#include <exception>
+#include <iostream>
 #include <string>
 
 int main()
 {
-  int const width  = 800;
-  int const height = 600;
+  try {
+    int const width  = 1000;
+    int const height = 1000;
 
-  /* sf::RenderWindow window1(sf::VideoMode(width, height), "Lotka-Volterra 1");
+    // lotka_volterra::Simulation simulation1(0.005, 2., 0.1, 0.1, 1., 9., 20.);
+    // lotka_volterra::Simulation simulation1(0.005, 2., 0.1, 0.1, 1., 7., 15.);
+    lotka_volterra::Simulation simulation1(0.008, 2., 0.1, 0.1, 1., 4., 8.);
+    simulation1.evolve_time(100.);
+    lotka_volterra::Renderer renderer1(width, height);
 
-  lotka_volterra::Simulation simulation1(0.0001, 2., 0.1, 0.1, 1., 5.5, 10.);
-  simulation1.evolve_time(100.);
+    sf::RenderWindow window2(sf::VideoMode(width, height),
+                             "Lotka-Volterra (animated)");
+    // lotka_volterra::Simulation simulation2(0.005, 2., 0.1, 0.1, 1., 9., 20.);
+    // lotka_volterra::Simulation simulation2(0.005, 2., 0.1, 0.1, 1., 7., 15.);
+    lotka_volterra::Simulation simulation2(0.008, 2., 0.1, 0.1, 1., 4., 8.);
+    lotka_volterra::Renderer renderer2(width, height);
+    std::size_t step2 = 0;
 
-  io::output_csv(simulation1, "trajectory1.csv");
-
-  lotka_volterra::Renderer renderer1(width, height);
-  while (window1.isOpen()) {
-    sf::Event event;
-    while (window1.pollEvent(event)) {
-      if (event.type == sf::Event::Closed) {
-        window1.close();
+    while (window2.isOpen()) {
+      sf::Event event2;
+      while (window2.pollEvent(event2)) {
+        if (event2.type == sf::Event::Closed) {
+          window2.close();
+        }
+      }
+      if (step2 < simulation1.steps()) {
+        if (step2 + 1 < simulation2.steps()) {
+          ++step2;
+        } else {
+          simulation2.evolve();
+        }
+        window2.clear(sf::Color::White);
+        renderer2.draw(window2, simulation2, step2);
+        window2.display();
+      } else {
+        window2.close();
+        sf::RenderWindow window1(sf::VideoMode(width, height),
+                                 "Lotka-Volterra (end)");
+        while (window1.isOpen()) {
+          sf::Event event1;
+          while (window1.pollEvent(event1)) {
+            if (event1.type == sf::Event::Closed) {
+              window1.close();
+            }
+          }
+          window1.clear(sf::Color::White);
+          renderer1.draw(window1, simulation1);
+          window1.display();
+        }
       }
     }
-    window1.clear(sf::Color::White);
-    renderer1.draw_axes(window1, width, height);
-    renderer1.draw_ticks(window1, width, height);
-    renderer1.draw(window1, simulation1);
-    window1.display();
-  } */
+    io::output_csv(simulation2, "trajectory2.csv");
+    io::output_csv(simulation1, "trajectory1.csv");
 
-  sf::RenderWindow window(sf::VideoMode(width, height), "Lotka-Volterra");
-
-  // lotka_volterra::Simulation simulation1(0.0001, 2., 0.1, 0.1, 1., 5.5, 10.);
-  // simulation1.evolve_time(100.);
-  // lotka_volterra::Renderer renderer1(width, height);
-
-  lotka_volterra::Simulation simulation2(0.01, 2., 0.1, 0.1, 1., 9.9, 10.);
-  lotka_volterra::Renderer renderer2(width, height);
-
-  std::size_t step = 0;
-  while (window.isOpen()) {
-    sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
-        window.close();
-    }
-
-    if (step + 1 < simulation2.steps())
-      ++step;
-    else
-      simulation2.evolve();
-
-    window.clear(sf::Color::White);
-
-    // renderer1.draw_axes(window, width, height);
-    // renderer1.draw_ticks(window, width, height);
-    // renderer1.draw(window, simulation1);
-
-    // renderer2.draw_axes(window, width, height);
-    // renderer2.draw_ticks(window, width, height);
-    renderer2.draw(window, simulation2, step);
-    window.display();
+    return 0;
+  } catch (const std::exception& e) {
+    std::cerr << "Fatal error: " << e.what() << '\n';
+    return EXIT_FAILURE;
+  } catch (...) {
+    std::cerr << "Unknown fatal error\n";
+    return EXIT_FAILURE;
   }
-  // io::output_csv(simulation1, "trajectory1.csv");
-  io::output_csv(simulation2, "trajectory2.csv");
-  return 0;
 }
