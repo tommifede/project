@@ -149,25 +149,33 @@ void Renderer::draw_axes(sf::RenderWindow& window, sf::View uiView)
 void Renderer::draw_ticks(sf::RenderWindow& window, sf::View uiView)
 {
   window.setView(uiView);
+  sf::Color tick_color = sf::Color::Black;
+  sf::Color grid_color = sf::Color(200, 200, 200, 100);
 
   for (double x = 0.; x <= world_max_; x += tick_step_) {
     float px          = axis_offset_ + static_cast<float>(x * pixels_per_unit_);
-    sf::Vertex tick[] = {{{px, y0_ - 5.f}, sf::Color::Black},
-                         {{px, y0_ + 5.f}, sf::Color::Black}};
+    sf::Vertex tick[] = {{{px, y0_ - 5.f}, tick_color},
+                         {{px, y0_ + 5.f}, tick_color}};
     window.draw(tick, 2, sf::Lines);
 
     label_.setString(std::to_string(static_cast<int>(x)));
     sf::FloatRect bounds = label_.getLocalBounds();
     label_.setPosition(px - bounds.width / 2.f, y0_ + 8.f);
     window.draw(label_);
+
+    sf::Vertex grid[] = {
+        {{px, y0_}, grid_color},
+        {{px, axis_offset_}},
+    };
+    window.draw(grid, 2, sf::Lines);
   }
 
   for (double y = 0.; y <= world_max_; y += tick_step_) {
     float py = y0_ - static_cast<float>(y * pixels_per_unit_);
     if (py < axis_offset_)
       break;
-    sf::Vertex tick[] = {{{axis_offset_ - 5.f, py}, sf::Color::Black},
-                         {{axis_offset_ + 5.f, py}, sf::Color::Black}};
+    sf::Vertex tick[] = {{{axis_offset_ - 5.f, py}, tick_color},
+                         {{axis_offset_ + 5.f, py}, tick_color}};
     window.draw(tick, 2, sf::Lines);
 
     label_.setString(std::to_string(static_cast<int>(y)));
@@ -175,6 +183,12 @@ void Renderer::draw_ticks(sf::RenderWindow& window, sf::View uiView)
     label_.setPosition(axis_offset_ - bounds.width - 8.f,
                        py - bounds.height / 2.f);
     window.draw(label_);
+
+    sf::Vertex grid[] = {
+        {{axis_offset_, py}, grid_color},
+        {{axis_offset_ + static_cast<float>(world_max_ * pixels_per_unit_), py},
+         grid_color}};
+    window.draw(grid, 2, sf::Lines);
   }
 }
 
@@ -198,7 +212,7 @@ void Renderer::draw_eq_point(sf::RenderWindow& window, sf::View uiView,
 
   sf::CircleShape eq_point(eq_point_radius_);
   eq_point.setFillColor(sf::Color::Blue);
-  eq_point.setOrigin(eq_point_radius_, eq_point_radius_);
+  eq_point.setOrigin(eq_point_radius_ / 2.f, eq_point_radius_ * 3.f / 2.f);
   eq_point.setPosition(eq_screen);
   window.draw(eq_point);
 }
@@ -215,11 +229,10 @@ void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation,
   sf::View uiView = window.getDefaultView();
 
   setDraw(window, simulation, current_step, uiView, worldView);
-
-  draw_trajectory(window, simulation, current_step, worldView);
   draw_ticks(window, uiView);
   draw_axes(window, uiView);
   draw_eq_point(window, uiView, worldView);
+  draw_trajectory(window, simulation, current_step, worldView);
 }
 
 void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation)
