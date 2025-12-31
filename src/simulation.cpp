@@ -1,7 +1,7 @@
 #include "../include/simulation.hpp"
 #include <cmath>
 #include <fstream>
-#include <iostream>
+#include <iostream> 
 
 namespace lotka_volterra {
 void Simulation::check_parameters(double dt, double A, double B, double C,

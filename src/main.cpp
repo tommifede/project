@@ -1,3 +1,4 @@
+#include "../include/input.hpp"
 #include "../include/output.hpp"
 #include "../include/renderer.hpp"
 #include "../include/simulation.hpp"
@@ -14,8 +15,8 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
 
-    // lotka_volterra::Simulation simulation1(0.01, 2., 0.1, 0.1, 1., 9., 20.);
-    lotka_volterra::Simulation simulation1(0.01, 2., 0.1, 0.1, 1., 7., 15.);
+    lotka_volterra::Simulation simulation1(0.01, 2., 0.1, 0.1, 1., 9., 20.);
+    // lotka_volterra::Simulation simulation1(0.01, 2., 0.1, 0.1, 1., 7., 15.);
     // lotka_volterra::Simulation simulation1(0.01, 2., 0.1, 0.1, 1., 4., 8.);
     simulation1.evolve_time(100.);
     lotka_volterra::Renderer renderer1(width, height);
@@ -23,8 +24,8 @@ int main()
     sf::RenderWindow window2(sf::VideoMode(width, height),
                              "Lotka-Volterra (animated)", sf::Style::Default,
                              settings);
-    // lotka_volterra::Simulation simulation2(0.01, 2., 0.1, 0.1, 1., 9., 20.);
-    lotka_volterra::Simulation simulation2(0.01, 2., 0.1, 0.1, 1., 7., 15.);
+    lotka_volterra::Simulation simulation2(0.01, 2., 0.1, 0.1, 1., 9., 20.);
+    // lotka_volterra::Simulation simulation2(0.01, 2., 0.1, 0.1, 1., 7., 15.);
     // lotka_volterra::Simulation simulation2(0.01, 2., 0.1, 0.1, 1., 4., 8.);
     lotka_volterra::Renderer renderer2(width, height);
     std::size_t step2 = 0;

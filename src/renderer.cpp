@@ -7,8 +7,8 @@
 namespace lotka_volterra {
 void Renderer::check_parameters(std::size_t width, std::size_t height)
 {
-  if (width == 0 || height == 0) {
-    throw std::invalid_argument("width, height must be > 0");
+  if (width == 0 || height == 0 || width != height) {
+    throw std::invalid_argument("width, height must be equal and > 0");
   }
 }
 
@@ -116,13 +116,13 @@ void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation,
   label_.setCharacterSize(label_font_size_);
   label_.setFillColor(sf::Color::Black);
 
-  float world_size = static_cast<float>(world_max_ * world_margin_factor_);
+  float world_size = static_cast<float>(world_max_);
   worldView.setSize(world_size, -world_size);
   worldView.setCenter(world_size / 2.f, world_size / 2.f);
   sf::Vector2u winSize = window.getSize();
   float left           = axis_offset_ / static_cast<float>(winSize.x);
   float bottom         = axis_offset_ / static_cast<float>(winSize.y);
-  worldView.setViewport({left, 0.f, 1.f - left, 1.f - bottom});
+  worldView.setViewport({left, bottom, 1.f - 2 * left, 1.f - 2 * bottom});
 }
 
 
@@ -180,8 +180,7 @@ void Renderer::draw_ticks(sf::RenderWindow& window, sf::View uiView)
 
     label_.setString(std::to_string(static_cast<int>(y)));
     sf::FloatRect bounds = label_.getLocalBounds();
-    label_.setPosition(axis_offset_ - bounds.width - 8.f,
-                       py - bounds.height / 2.f);
+    label_.setPosition(axis_offset_ - bounds.width - 10.f, py - bounds.height);
     window.draw(label_);
 
     sf::Vertex grid[] = {
@@ -208,13 +207,58 @@ void Renderer::draw_eq_point(sf::RenderWindow& window, sf::View worldView)
   float radius_world = eq_point_radius_ / static_cast<float>(pixels_per_unit_);
   sf::CircleShape eq_point(radius_world);
   eq_point.setFillColor(sf::Color::Blue);
-
   eq_point.setOrigin(radius_world, radius_world);
-
-  eq_point.setPosition(static_cast<float>(x_eq_ + radius_world / 2),
-                       static_cast<float>(y_eq_ + radius_world / 2));
+  eq_point.setPosition({static_cast<float>(x_eq_), static_cast<float>(y_eq_)});
 
   window.draw(eq_point);
+}
+
+void Renderer::draw_titles(sf::RenderWindow& window, sf::View uiView)
+{
+  window.setView(uiView);
+
+  sf::Text title;
+  title.setFont(font_);
+  title.setString("LOTKA-VOLTERRA SIMULATION RENDERING");
+  title.setCharacterSize(static_cast<unsigned int>(axis_offset_ / 3.f));
+  title.setFillColor(sf::Color::Black);
+
+  sf::FloatRect bounds = title.getLocalBounds();
+  title.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+  title.setPosition(uiView.getSize().x / 2.f, axis_offset_ / 2.f);
+
+  window.draw(title);
+
+  sf::Text x_title;
+  x_title.setFont(font_);
+  x_title.setString("prey");
+  x_title.setCharacterSize(static_cast<unsigned int>(axis_offset_ / 4.f));
+  x_title.setFillColor(sf::Color::Black);
+
+  sf::FloatRect x_bounds = x_title.getLocalBounds();
+  x_title.setOrigin(x_bounds.width / 2.f, x_bounds.height / 2.f);
+  x_title.setPosition(
+      axis_offset_ + static_cast<float>(world_max_ * pixels_per_unit_) / 2.f,
+      uiView.getSize().y - axis_offset_ / 2.f);
+
+  window.draw(x_title);
+
+
+  sf::Text y_title;
+  y_title.setFont(font_);
+  y_title.setString("predator");
+  y_title.setCharacterSize(static_cast<unsigned int>(axis_offset_ / 4.f));
+  y_title.setFillColor(sf::Color::Black);
+
+  sf::FloatRect y_bounds = y_title.getLocalBounds();
+  y_title.setOrigin(y_bounds.width / 2.f, y_bounds.height / 2.f);
+  y_title.setRotation(-90.f);
+
+  y_title.setPosition(
+      axis_offset_ / 3.f,
+      y0_ - static_cast<float>(world_max_ * pixels_per_unit_) / 2.f);
+
+  window.draw(y_title);
 }
 
 void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation,
@@ -233,6 +277,7 @@ void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation,
   draw_axes(window, uiView);
   draw_eq_point(window, worldView);
   draw_trajectory(window, simulation, current_step, worldView);
+  draw_titles(window, uiView);
 }
 
 void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation)

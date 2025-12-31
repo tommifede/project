@@ -26,7 +26,7 @@ private:
   int tick_count_               = 10;
   unsigned int label_font_size_ = 12;
   float eq_point_radius_        = 5.f;
-  double world_margin_factor_   = 1.05;
+  double world_margin_factor_   = 1.1;
 
   void check_parameters(std::size_t width, std::size_t height);
   sf::Color color_energy(double H, double H0) const;
@@ -40,12 +40,13 @@ public:
   Renderer(std::size_t width, std::size_t height);
   void setDraw(sf::RenderWindow& window, Simulation const& simulation,
                std::size_t current_step, sf::View uiView, sf::View& worldView,
-               double margin = 1.05, float axis_offset = 40.f);
+               double margin = 1.2, float axis_offset = 100.f);
   void draw_axes(sf::RenderWindow& window, sf::View uiView);
   void draw_ticks(sf::RenderWindow& window, sf::View uiView);
   void draw_trajectory(sf::RenderWindow& window, Simulation const& simulation,
                        std::size_t current_step, sf::View& worldView);
   void draw_eq_point(sf::RenderWindow& window, sf::View worldView);
+  void draw_titles(sf::RenderWindow& window, sf::View uiView);
   void draw(sf::RenderWindow& window, Simulation const& simulation,
             std::size_t current_step);
   void draw(sf::RenderWindow& window, Simulation const& simulation);
