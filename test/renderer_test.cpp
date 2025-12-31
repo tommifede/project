@@ -41,7 +41,6 @@ TEST_CASE("Renderer draws equilibrium point and draws axes without crashing")
   sf::View view;
   view.setSize(200.f, 200.f);
 
-  CHECK_NOTHROW(r.draw_eq_point(window, view, view));
+  CHECK_NOTHROW(r.draw_eq_point(window, view));
   CHECK_NOTHROW(r.draw_axes(window, view));
 }
-

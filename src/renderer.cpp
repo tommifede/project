@@ -201,19 +201,19 @@ void Renderer::draw_trajectory(sf::RenderWindow& window,
   window.draw(trajectory_);
 }
 
-void Renderer::draw_eq_point(sf::RenderWindow& window, sf::View uiView,
-                             sf::View worldView)
+void Renderer::draw_eq_point(sf::RenderWindow& window, sf::View worldView)
 {
-  window.setView(uiView);
+  window.setView(worldView);
 
-  sf::Vector2f eq_world(static_cast<float>(x_eq_), static_cast<float>(y_eq_));
-  sf::Vector2f eq_screen =
-      static_cast<sf::Vector2f>(window.mapCoordsToPixel(eq_world, worldView));
-
-  sf::CircleShape eq_point(eq_point_radius_);
+  float radius_world = eq_point_radius_ / static_cast<float>(pixels_per_unit_);
+  sf::CircleShape eq_point(radius_world);
   eq_point.setFillColor(sf::Color::Blue);
-  eq_point.setOrigin(eq_point_radius_ / 2.f, eq_point_radius_ * 3.f / 2.f);
-  eq_point.setPosition(eq_screen);
+
+  eq_point.setOrigin(radius_world, radius_world);
+
+  eq_point.setPosition(static_cast<float>(x_eq_ + radius_world / 2),
+                       static_cast<float>(y_eq_ + radius_world / 2));
+
   window.draw(eq_point);
 }
 
@@ -231,7 +231,7 @@ void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation,
   setDraw(window, simulation, current_step, uiView, worldView);
   draw_ticks(window, uiView);
   draw_axes(window, uiView);
-  draw_eq_point(window, uiView, worldView);
+  draw_eq_point(window, worldView);
   draw_trajectory(window, simulation, current_step, worldView);
 }
 

@@ -33,13 +33,13 @@ endif()
 string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined")
 
 # se usato, richiedi il componente graphics della libreria SFML (versione 2.6 in Ubuntu 24.04)
-find_package(SFML 2.6 REQUIRED COMPONENTS graphics window system)
+find_package(SFML 2.6 COMPONENTS graphics REQUIRED)
 
 # dichiara un eseguibile chiamato "progetto", prodotto a partire dai file sorgente indicati
 # sostituire "progetto" con il nome del proprio eseguibile e i file sorgente con i propri (con nomi sensati!)
 add_executable(project src/main.cpp src/simulation.cpp src/renderer.cpp io/output.cpp)
 # nel caso si usi SFML. analogamente per eventuali altre librerie
-target_link_libraries(project PRIVATE sfml-graphics sfml-window sfml-system)
+target_link_libraries(project PRIVATE sfml-graphics)
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/font.ttf DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -50,7 +50,7 @@ if (BUILD_TESTING)
   # aggiungi l'eseguibile progetto.t
   add_executable(project_test src/simulation.cpp src/renderer.cpp test/main_test.cpp test/simulation_test.cpp test/renderer_test.cpp)
   # nel caso si usi SFML. analogamente per eventuali altre librerie
-  target_link_libraries(project_test PRIVATE sfml-graphics sfml-window sfml-system)
+  target_link_libraries(project_test PRIVATE sfml-graphics)
   # include directory (per header e doctest.h)
   target_include_directories(project_test PRIVATE 
     include

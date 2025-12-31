@@ -19,7 +19,7 @@ private:
   double max_x_;
   double max_y_;
   float axis_offset_;
-  sf::VertexArray trajectory_;
+  sf::VertexArray trajectory_{sf::LineStrip};
   std::size_t last_step_drawn_ = 0;
   sf::Text label_;
   sf::Font font_;
@@ -45,8 +45,7 @@ public:
   void draw_ticks(sf::RenderWindow& window, sf::View uiView);
   void draw_trajectory(sf::RenderWindow& window, Simulation const& simulation,
                        std::size_t current_step, sf::View& worldView);
-  void draw_eq_point(sf::RenderWindow& window, sf::View uiView,
-                     sf::View worldView);
+  void draw_eq_point(sf::RenderWindow& window, sf::View worldView);
   void draw(sf::RenderWindow& window, Simulation const& simulation,
             std::size_t current_step);
   void draw(sf::RenderWindow& window, Simulation const& simulation);
