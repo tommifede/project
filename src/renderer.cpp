@@ -1,14 +1,15 @@
 #include "../include/renderer.hpp"
-#include "../include/simulation.hpp"
 #include <SFML/Graphics.hpp>
 #include <cmath>
-#include <string>
 
 namespace lotka_volterra {
 void Renderer::check_parameters(std::size_t width, std::size_t height)
 {
-  if (width == 0 || height == 0 || width != height) {
-    throw std::invalid_argument("width, height must be equal and > 0");
+  if (width < 600 || width > 1900) {
+    throw std::invalid_argument("width must be between 600 and 1900.");
+  }
+  if (height < 600 || height > 1000) {
+    throw std::invalid_argument("height must be between 600 and 1000.");
   }
 }
 
@@ -21,26 +22,37 @@ sf::Color Renderer::color_energy(double H, double H0) const
   double dH = std::abs(H - H0);
   double t  = (H0 != 0) ? std::min(dH / std::abs(H0), 1.) : 1.;
 
-  sf::Uint8 r = static_cast<sf::Uint8>(255 * t);
-  sf::Uint8 g = static_cast<sf::Uint8>(255 * (1 - t));
+  sf::Uint8 r;
+  sf::Uint8 g;
+  if (t < 0.5) {
+    r = static_cast<sf::Uint8>(t * 2 * 255);
+    g = 255;
+  } else {
+    r = 255;
+    g = static_cast<sf::Uint8>((1 - (t - 0.5) * 2) * 255);
+  }
 
   return {r, g, 0};
 }
 
 double Renderer::compute_tick_step(double max_value)
 {
-  if (max_value <= 0.)
+  if (max_value <= 0.) {
     return 1.;
+  }
 
-  double raw_step = max_value / tick_count_; // 10 tick visibili
+  double raw_step = max_value / tick_count_;
   double order    = std::floor(std::log10(raw_step));
   double pow_step = std::pow(10., order);
+  double factor   = raw_step / pow_step;
 
-  double factor = raw_step / pow_step;
-  if (factor < 2.)
+  if (factor < 2.) {
     return 1. * pow_step;
-  if (factor < 5.)
+  }
+  if (factor < 5.) {
     return 2. * pow_step;
+  }
+
   return 5. * pow_step;
 }
 
@@ -77,6 +89,7 @@ void Renderer::update_trajectory(Simulation const& simulation,
         {{static_cast<float>(state.x), static_cast<float>(state.y)},
          color_energy(state.H, H0)});
   }
+
   last_step_drawn_ = current_step;
 }
 
@@ -88,18 +101,29 @@ Renderer::Renderer(std::size_t width, std::size_t height)
   check_parameters(width, height);
 
   if (!font_.loadFromFile("font.ttf")) {
-    throw std::runtime_error("Failed to load font");
+    throw std::runtime_error("failed to load font.");
   }
 }
 
+std::size_t Renderer::getWidth() const
+{
+  return width_;
+}
+
+std::size_t Renderer::getHeight() const
+{
+  return height_;
+}
+
 void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation,
-                       std::size_t current_step, sf::View uiView,
+                       std::size_t current_step, sf::View const& uiView,
                        sf::View& worldView, double margin, float axis_offset)
 {
-  x_eq_  = simulation.GetPar(3) / simulation.GetPar(2);
-  y_eq_  = simulation.GetPar(0) / simulation.GetPar(1);
+  x_eq_  = simulation.get_parameter(3) / simulation.get_parameter(2);
+  y_eq_  = simulation.get_parameter(0) / simulation.get_parameter(1);
   max_x_ = x_eq_;
   max_y_ = y_eq_;
+
   for (std::size_t i = 0; i < current_step; ++i) {
     State const& state = simulation.state_at(i);
     max_x_             = std::max(max_x_, std::abs(state.x));
@@ -119,14 +143,16 @@ void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation,
   float world_size = static_cast<float>(world_max_);
   worldView.setSize(world_size, -world_size);
   worldView.setCenter(world_size / 2.f, world_size / 2.f);
+
   sf::Vector2u winSize = window.getSize();
   float left           = axis_offset_ / static_cast<float>(winSize.x);
   float bottom         = axis_offset_ / static_cast<float>(winSize.y);
+
   worldView.setViewport({left, bottom, 1.f - 2 * left, 1.f - 2 * bottom});
 }
 
 
-void Renderer::draw_axes(sf::RenderWindow& window, sf::View uiView)
+void Renderer::draw_axes(sf::RenderWindow& window, sf::View const& uiView)
 {
   window.setView(uiView);
 
@@ -146,7 +172,7 @@ void Renderer::draw_axes(sf::RenderWindow& window, sf::View uiView)
   window.draw(y_axis, 2, sf::Lines);
 }
 
-void Renderer::draw_ticks(sf::RenderWindow& window, sf::View uiView)
+void Renderer::draw_ticks(sf::RenderWindow& window, sf::View const& uiView)
 {
   window.setView(uiView);
   sf::Color tick_color = sf::Color::Black;
@@ -172,35 +198,42 @@ void Renderer::draw_ticks(sf::RenderWindow& window, sf::View uiView)
 
   for (double y = 0.; y <= world_max_; y += tick_step_) {
     float py = y0_ - static_cast<float>(y * pixels_per_unit_);
-    if (py < axis_offset_)
+    if (py < axis_offset_) {
       break;
+    }
     sf::Vertex tick[] = {{{axis_offset_ - 5.f, py}, tick_color},
                          {{axis_offset_ + 5.f, py}, tick_color}};
+
     window.draw(tick, 2, sf::Lines);
 
     label_.setString(std::to_string(static_cast<int>(y)));
     sf::FloatRect bounds = label_.getLocalBounds();
     label_.setPosition(axis_offset_ - bounds.width - 10.f, py - bounds.height);
+
     window.draw(label_);
 
     sf::Vertex grid[] = {
         {{axis_offset_, py}, grid_color},
         {{axis_offset_ + static_cast<float>(world_max_ * pixels_per_unit_), py},
          grid_color}};
+
     window.draw(grid, 2, sf::Lines);
   }
 }
 
 void Renderer::draw_trajectory(sf::RenderWindow& window,
                                Simulation const& simulation,
-                               std::size_t current_step, sf::View& worldView)
+                               std::size_t current_step,
+                               sf::View const& worldView)
 {
   window.setView(worldView);
   update_trajectory(simulation, current_step);
+
   window.draw(trajectory_);
 }
 
-void Renderer::draw_eq_point(sf::RenderWindow& window, sf::View worldView)
+void Renderer::draw_eq_point(sf::RenderWindow& window,
+                             sf::View const& worldView)
 {
   window.setView(worldView);
 
@@ -213,7 +246,7 @@ void Renderer::draw_eq_point(sf::RenderWindow& window, sf::View worldView)
   window.draw(eq_point);
 }
 
-void Renderer::draw_titles(sf::RenderWindow& window, sf::View uiView)
+void Renderer::draw_titles(sf::RenderWindow& window, sf::View const& uiView)
 {
   window.setView(uiView);
 
@@ -253,7 +286,6 @@ void Renderer::draw_titles(sf::RenderWindow& window, sf::View uiView)
   sf::FloatRect y_bounds = y_title.getLocalBounds();
   y_title.setOrigin(y_bounds.width / 2.f, y_bounds.height / 2.f);
   y_title.setRotation(-90.f);
-
   y_title.setPosition(
       axis_offset_ / 3.f,
       y0_ - static_cast<float>(world_max_ * pixels_per_unit_) / 2.f);
@@ -267,6 +299,7 @@ void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation,
   if (current_step == 0) {
     return;
   }
+
   current_step = std::min(current_step, simulation.steps());
 
   sf::View worldView;

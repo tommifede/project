@@ -1,6 +1,5 @@
 #include "../include/output.hpp"
 #include <fstream>
-#include <string>
 
 namespace io {
 void output_csv(lotka_volterra::Simulation const& simulation,

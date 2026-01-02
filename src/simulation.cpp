@@ -1,23 +1,22 @@
 #include "../include/simulation.hpp"
 #include <cmath>
 #include <fstream>
-#include <iostream> 
 
 namespace lotka_volterra {
 void Simulation::check_parameters(double dt, double A, double B, double C,
                                   double D, double x0, double y0) const
 {
   if (dt <= 0.) {
-    throw std::invalid_argument("dt must be > 0");
+    throw std::invalid_argument("dt must be > 0.");
   }
   if (dt > 0.01 || dt < 0.0001) {
-    throw std::invalid_argument("dt must be between 0.0001 and 0.01");
+    throw std::invalid_argument("dt must be between 0.0001 and 0.01.");
   }
   if (A <= 0. || B <= 0. || C <= 0. || D <= 0.) {
-    throw std::invalid_argument("A, B, C, D must be > 0");
+    throw std::invalid_argument("A, B, C, D must be > 0.");
   }
   if (x0 < 0. || y0 < 0.) {
-    throw std::invalid_argument("x0, y0 must be >= 0");
+    throw std::invalid_argument("x0, y0 must be >= 0.");
   }
 }
 
@@ -54,10 +53,15 @@ Simulation::Simulation(double dt, double A, double B, double C, double D,
   states_.push_back({x0, y0, compute_H(x0, y0)});
 }
 
-double const& Simulation::GetPar(std::size_t i) const
+double Simulation::dt() const
+{
+  return dt_;
+}
+
+double const& Simulation::get_parameter(std::size_t i) const
 {
   if (i > 3) {
-    throw std::invalid_argument("NO");
+    throw std::invalid_argument("parameter index out of range.");
   }
   return pars_[i];
 }
@@ -83,27 +87,24 @@ void Simulation::evolve()
   states_.push_back({x_abs, y_abs, compute_H(x_abs, y_abs)});
 }
 
-void Simulation::evolve_time(double T)
-{
-  double n = T / dt_;
-  if (std::abs(n - std::round(n)) > 1e-8) {
-    throw std::invalid_argument("T must be multiple of dt");
-  }
-  std::size_t const tot_steps =
-      steps() + static_cast<std::size_t>(std::round(n));
-  for (std::size_t i = steps(); i < tot_steps; ++i) {
-    evolve(); // MODIFICARE CON evolve_steps
-  }
-}
-
 void Simulation::evolve_steps(std::size_t add_steps)
 {
-  /* std::size_t const tot_steps = steps() + add_steps;
-  for (std::size_t i = steps(); i < tot_steps; ++i) {
-    evolve();
-  } */
   for (std::size_t i = 0; i < add_steps; ++i) {
     evolve();
   }
+}
+
+void Simulation::evolve_time(double T)
+{
+  double n = T / dt_;
+  if (T < 0) {
+    throw std::invalid_argument("T must be positive.");
+  }
+  if (std::abs(n - std::round(n)) > 1e-8) {
+    throw std::invalid_argument("T must be multiple of dt.");
+  }
+
+  std::size_t steps = static_cast<std::size_t>(std::round(n));
+  evolve_steps(steps);
 }
 } // namespace lotka_volterra

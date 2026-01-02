@@ -38,15 +38,17 @@ private:
 
 public:
   Renderer(std::size_t width, std::size_t height);
+  std::size_t getWidth() const;
+  std::size_t getHeight() const;
   void setDraw(sf::RenderWindow& window, Simulation const& simulation,
-               std::size_t current_step, sf::View uiView, sf::View& worldView,
+               std::size_t current_step, sf::View const& uiView, sf::View& worldView,
                double margin = 1.2, float axis_offset = 100.f);
-  void draw_axes(sf::RenderWindow& window, sf::View uiView);
-  void draw_ticks(sf::RenderWindow& window, sf::View uiView);
+  void draw_axes(sf::RenderWindow& window, sf::View const& uiView);
+  void draw_ticks(sf::RenderWindow& window, sf::View const& uiView);
   void draw_trajectory(sf::RenderWindow& window, Simulation const& simulation,
-                       std::size_t current_step, sf::View& worldView);
-  void draw_eq_point(sf::RenderWindow& window, sf::View worldView);
-  void draw_titles(sf::RenderWindow& window, sf::View uiView);
+                       std::size_t current_step, sf::View const& worldView);
+  void draw_eq_point(sf::RenderWindow& window, sf::View const& worldView);
+  void draw_titles(sf::RenderWindow& window, sf::View const& uiView);
   void draw(sf::RenderWindow& window, Simulation const& simulation,
             std::size_t current_step);
   void draw(sf::RenderWindow& window, Simulation const& simulation);
