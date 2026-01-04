@@ -18,7 +18,7 @@ int main()
     sf::RenderWindow win(
         sf::VideoMode(static_cast<unsigned int>(ren.getSide()),
                       static_cast<unsigned int>(ren.getSide())),
-        "Lotka-Volterra", sf::Style::Default, settings);
+        "Lotka-Volterra", sf::Style::Titlebar | sf::Style::Close, settings);
     std::size_t step = 0;
 
     while (win.isOpen()) {
