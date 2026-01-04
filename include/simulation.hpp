@@ -11,6 +11,7 @@ struct State
   double y;
   double H;
 };
+
 class Simulation
 {
 private:

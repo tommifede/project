@@ -20,8 +20,7 @@ struct SimulationParams
 
 struct RendererParams
 {
-  std::size_t width;
-  std::size_t height;
+  std::size_t size;
 };
 
 double read_double(std::string const& var, std::string const& prompt,
@@ -35,7 +34,6 @@ lotka_volterra::Simulation input_simulation();
 lotka_volterra::Renderer input_renderer(RendererParams ren_p);
 lotka_volterra::Renderer input_renderer();
 double input_T(lotka_volterra::Simulation const& sim);
-
 } // namespace io
 
 #endif

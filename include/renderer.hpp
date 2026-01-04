@@ -8,8 +8,7 @@ namespace lotka_volterra {
 class Renderer
 {
 private:
-  std::size_t width_;
-  std::size_t height_;
+  std::size_t size_;
   double world_max_;
   double pixels_per_unit_;
   float y0_;
@@ -27,28 +26,35 @@ private:
   unsigned int label_font_size_ = 12;
   float eq_point_radius_        = 5.f;
   double world_margin_factor_   = 1.1;
+  bool world_initialized_       = false;
 
-  void check_parameters(std::size_t width, std::size_t height);
+  void check_parameter(std::size_t size);
   sf::Color color_energy(double H, double H0) const;
   double compute_tick_step(double max_value);
   double step_tick(double margin, double max_x, double max_y);
   double max_world(double margin, double max_x, double max_y);
-  double scale(double world_max, float axis_offset, sf::View uiView);
-  void update_trajectory(Simulation const& sim, std::size_t current_step);
+  double scale(double world_max, float axis_offset, sf::View ui_view);
+  void update_trajectory(Simulation const& simulation,
+                         std::size_t current_step);
+  // void compute_world_bounds(Simulation const& simulation, double margin);
+  // void set_world_view(sf::RenderWindow& window, sf::View& world_view) const;
+  // void set_ui_view(sf::View const& ui_view, float axis_offset, double
+  // margin);
 
 public:
-  Renderer(std::size_t width, std::size_t height);
-  std::size_t getWidth() const;
-  std::size_t getHeight() const;
+  Renderer(std::size_t side);
+  std::size_t getSide() const;
+  // std::size_t getHeight() const;
   void setDraw(sf::RenderWindow& window, Simulation const& simulation,
-               std::size_t current_step, sf::View const& uiView, sf::View& worldView,
-               double margin = 1.2, float axis_offset = 100.f);
-  void draw_axes(sf::RenderWindow& window, sf::View const& uiView);
-  void draw_ticks(sf::RenderWindow& window, sf::View const& uiView);
-  void draw_trajectory(sf::RenderWindow& window, Simulation const& simulation,
-                       std::size_t current_step, sf::View const& worldView);
-  void draw_eq_point(sf::RenderWindow& window, sf::View const& worldView);
-  void draw_titles(sf::RenderWindow& window, sf::View const& uiView);
+               std::size_t current_step, sf::View const& ui_view,
+               sf::View& world_view, double margin = 1.2,
+               float axis_offset = 100.f);
+  void drawAxes(sf::RenderWindow& window, sf::View const& ui_view);
+  void drawTicks(sf::RenderWindow& window, sf::View const& ui_view);
+  void drawTrajectory(sf::RenderWindow& window, Simulation const& simulation,
+                      std::size_t current_step, sf::View const& world_view);
+  void drawEqPoint(sf::RenderWindow& window, sf::View const& world_view);
+  void drawTitles(sf::RenderWindow& window, sf::View const& ui_view);
   void draw(sf::RenderWindow& window, Simulation const& simulation,
             std::size_t current_step);
   void draw(sf::RenderWindow& window, Simulation const& simulation);

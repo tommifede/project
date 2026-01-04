@@ -5,8 +5,9 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 
 ## Project Structure
 - **include/**: header files
+    - *input.hpp*
     - *io.hpp*
-    - *namespace.hpp*
+    - *lotka_volterra.hpp*
     - *output.hpp*
     - *renderer.hpp*
     - *simulation.hpp*

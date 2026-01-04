@@ -6,8 +6,9 @@ void output_csv(lotka_volterra::Simulation const& simulation,
                 std::string const& filename)
 {
   std::ofstream file(filename);
+
   if (!file) {
-    throw std::runtime_error("Can't open file");
+    throw std::runtime_error("cannot open file");
   }
 
   file << "step,x,y,H\n";
