@@ -44,8 +44,6 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     Reading package lists... Done
     Building dependency tree... Done
     Reading state information... Done
-    The following NEW packages will be installed:
-    ninja-build
     ...
     ```
 
@@ -54,30 +52,34 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     $ brew install ninja
     ==> Downloading https://formulae.brew.sh/api/formula.jws.json
     ==> Downloading https://formulae.brew.sh/api/cask.jws.json
-    ==> Downloading https://ghcr.io/v2/homebrew/core/ninja/manifests/1.12.1-1
-    Already downloaded: /Users/battilan/Library/Caches/Homebrew/downloads/e245d32f82082268a4093a10343e3ef9e2b2eebc81897551ebe10cdea0f45051--ninja-1.12.1-1.bottle_manifest.json
-    ==> Fetching ninja
     ...
     ```
 
     To verify the installation:
     ```bash
     ninja --version
-    1.13.1
+    1.11.1
     ```
 
 - **Creation of work area**
 
-    Create directory `/home/project_name` (with structure above):
+    Create directory `/home/user/project_name` (with structure above):
     ```bash
     $ cd ~
     $ mkdir project_name
     ```
     
-    Alternatively, unzip `/home/project_name_.zip` (`/home/project-main.zip` if downloaded directly from github):
+    Alternatively, unzip `/home/user/project_name_.zip` (`/home/user/project-main.zip` if downloaded directly from github):
     ```bash
     $ cd ~
-    $ tar -xvf project_name_.tar.gz
+    $ unzip project_name.zip
+    Archive:  project_name_.zip
+    ...
+    ```
+
+    Now, go inside the work area:
+    ```bash
+    $ cd project_name
     ```
 
 - **Creation of compile area**
