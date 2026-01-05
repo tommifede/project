@@ -16,7 +16,7 @@ TEST_CASE("Simulation constructor works and initialize correctly")
   double expected_H =
       -4. * std::log(5.) + 3. * 5. + 2. * 6. - 1. * std::log(6.);
   CHECK(s0.H == doctest::Approx(expected_H));
-}
+} 
 
 TEST_CASE("Simulation evolves correctly")
 {
