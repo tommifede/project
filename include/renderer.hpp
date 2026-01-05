@@ -36,15 +36,10 @@ private:
   double scale(double world_max, float axis_offset, sf::View ui_view);
   void update_trajectory(Simulation const& simulation,
                          std::size_t current_step);
-  // void compute_world_bounds(Simulation const& simulation, double margin);
-  // void set_world_view(sf::RenderWindow& window, sf::View& world_view) const;
-  // void set_ui_view(sf::View const& ui_view, float axis_offset, double
-  // margin);
 
 public:
-  Renderer(std::size_t side);
-  std::size_t getSide() const;
-  // std::size_t getHeight() const;
+  Renderer(std::size_t size);
+  std::size_t getSize() const;
   void setDraw(sf::RenderWindow& window, Simulation const& simulation,
                std::size_t current_step, sf::View const& ui_view,
                sf::View& world_view, double margin = 1.2,

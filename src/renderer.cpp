@@ -7,11 +7,8 @@ namespace lotka_volterra {
 void Renderer::check_parameter(std::size_t size)
 {
   if (size < 800 || size > 1000) {
-    throw std::invalid_argument("side must be between 600 and 1900.");
+    throw std::invalid_argument("size must be between 800 and 1000.");
   }
-  // if (height < 800 || height > 1000) {
-  //   throw std::invalid_argument("height must be between 600 and 1000.");
-  // }
 }
 
 sf::Color Renderer::color_energy(double H, double H0) const
@@ -97,62 +94,6 @@ void Renderer::update_trajectory(Simulation const& simulation,
   last_step_drawn_ = current_step;
 }
 
-// void Renderer::compute_world_bounds(Simulation const& simulation, double
-// margin)
-// {
-//   x_eq_ = simulation.get_parameter(3) / simulation.get_parameter(2);
-//   y_eq_ = simulation.get_parameter(0) / simulation.get_parameter(1);
-
-//   max_x_ = std::abs(x_eq_);
-//   max_y_ = std::abs(y_eq_);
-
-//   for (std::size_t i = 0; i < simulation.steps(); ++i) {
-//     State const& s = simulation.state_at(i);
-//     max_x_         = std::max(max_x_, std::abs(s.x));
-//     max_y_         = std::max(max_y_, std::abs(s.y));
-//   }
-
-//   world_max_ = max_world(margin, max_x_, max_y_);
-// }
-
-// void Renderer::set_world_view(sf::RenderWindow& window,
-//                               sf::View& world_view) const
-// {
-//   float world_size = static_cast<float>(world_max_);
-
-//   world_view.setSize(world_size, -world_size);
-//   world_view.setCenter(world_size / 2.f, world_size / 2.f);
-
-//   sf::Vector2u winSize = window.getSize();
-
-//   float left   = axis_offset_ / static_cast<float>(winSize.x);
-//   float bottom = axis_offset_ / static_cast<float>(winSize.y);
-
-//   float avail_w = 1.f - 2.f * left;
-//   float avail_h = 1.f - 2.f * bottom;
-
-//   float side = std::min(avail_w, avail_h);
-
-//   float vpLeft   = left + (avail_w - side) / 2.f;
-//   float vpBottom = bottom + (avail_h - side) / 2.f;
-
-//   world_view.setViewport({vpLeft, vpBottom, side, side});
-// }
-
-// void Renderer::set_ui_view(sf::View const& ui_view, float axis_offset,
-//                            double margin)
-// {
-//   axis_offset_ = axis_offset;
-//   y0_          = ui_view.getSize().y - axis_offset_;
-
-//   pixels_per_unit_ = scale(world_max_, axis_offset_, ui_view);
-//   tick_step_       = step_tick(margin, max_x_, max_y_);
-
-//   label_.setFont(font_);
-//   label_.setCharacterSize(label_font_size_);
-//   label_.setFillColor(sf::Color::Black);
-// }
-
 
 Renderer::Renderer(std::size_t size)
     : size_{size}
@@ -164,15 +105,10 @@ Renderer::Renderer(std::size_t size)
   }
 }
 
-std::size_t Renderer::getSide() const
+std::size_t Renderer::getSize() const
 {
   return size_;
 }
-
-// std::size_t Renderer::getHeight() const
-// {
-//   return height_;
-// }
 
 void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation,
                        std::size_t current_step, sf::View const& ui_view,
@@ -208,28 +144,6 @@ void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation,
   float bottom         = axis_offset_ / static_cast<float>(winSize.y);
 
   world_view.setViewport({left, bottom, 1.f - 2 * left, 1.f - 2 * bottom});
-
-  // sf::Vector2u winSize = window.getSize();
-
-  // float left   = axis_offset_ / static_cast<float>(winSize.x);
-  // float bottom = axis_offset_ / static_cast<float>(winSize.y);
-
-  // float scale_w = 1.f - 2.f * left;
-  // float scale_h = 1.f - 2.f * bottom;
-
-  // float side = std::min(scale_w, scale_h);
-
-  // float vpLeft   = left + (scale_w - side) / 2.f;
-  // float vpBottom = bottom + (scale_h - side) / 2.f;
-
-  // world_view.setViewport({vpLeft, vpBottom, side, side});
-  // if (!world_initialized_) {
-  //   compute_world_bounds(simulation, margin);
-  //   set_ui_view(ui_view, axis_offset, margin);
-  //   world_initialized_ = true;
-  // }
-
-  // set_world_view(window, world_view);
 }
 
 

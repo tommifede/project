@@ -122,7 +122,7 @@ RendererParams ask_renderer_params()
   std::cout << "Insert renderer parameter values\n";
 
   ren_p.size =
-      read_size("size", "size (integer, between 800 and 100): ", 800, 1000);
+      read_size("size", "size (integer, between 800 and 1000): ", 800, 1000);
 
   return ren_p;
 }
