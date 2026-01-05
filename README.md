@@ -37,6 +37,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 - **Installation of ninja (build system)**
 
     Install the ninja-build-system:
+    
     In _linux_
     ```bash
     $ sudo apt install ninja-build
