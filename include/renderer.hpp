@@ -48,7 +48,8 @@ public:
   void drawTicks(sf::RenderWindow& window, sf::View const& ui_view);
   void drawTrajectory(sf::RenderWindow& window, Simulation const& simulation,
                       std::size_t current_step, sf::View const& world_view);
-  void drawEqPoint(sf::RenderWindow& window, sf::View const& world_view);
+  void drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view,
+                    sf::View const& world_view);
   void drawTitles(sf::RenderWindow& window, sf::View const& ui_view);
   void draw(sf::RenderWindow& window, Simulation const& simulation,
             std::size_t current_step);

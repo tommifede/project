@@ -13,7 +13,7 @@ TEST_CASE("Renderer constructor rejects width and height out of range")
 TEST_CASE("Renderer draws without crashing")
 {
   lotka_volterra::Simulation sim(0.01, 2., 0.1, 0.1, 1., 10., 10.);
-  sim.evolve_steps(10);
+  sim.evolveSteps(10);
 
   lotka_volterra::Renderer r(800);
   sf::RenderWindow window(sf::VideoMode(800, 800), "test", sf::Style::None);
@@ -24,7 +24,7 @@ TEST_CASE("Renderer draws without crashing")
 TEST_CASE("Renderer draws by step without crashing")
 {
   lotka_volterra::Simulation sim(0.01, 2., 0.1, 0.1, 1., 10., 10.);
-  sim.evolve_steps(5);
+  sim.evolveSteps(5);
 
   lotka_volterra::Renderer r(800);
   sf::RenderWindow window(sf::VideoMode(800, 800), "test", sf::Style::None);
@@ -40,6 +40,6 @@ TEST_CASE("Renderer draws equilibrium point and draws axes without crashing")
   sf::RenderWindow window(sf::VideoMode(800, 800), "test", sf::Style::None);
   sf::View view;
 
-  CHECK_NOTHROW(r.drawEqPoint(window, view));
+  CHECK_NOTHROW(r.drawEqPoints(window, view, view));
   CHECK_NOTHROW(r.drawAxes(window, view));
 }

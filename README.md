@@ -8,7 +8,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 ---
 
 ## Project Structure
-- **include/**: header files
+- **include/**: headesrmaibdo for files
     - _input.hpp_
     - _io.hpp_
     - _lotka_volterra.hpp_
@@ -34,6 +34,28 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 ---
 
 ## Instructions
+
+- **Installation of SFML (graphics library)**
+
+    Install SFML:
+
+    in _linux_
+    ```bash
+    sudo apt install libsfml-dev
+    Reading package lists... Done
+    Building dependency tree... Done
+    Reading state information... Done
+    ...
+    ```
+
+    in _macOs_
+    ```bash
+    brew install sfml
+    ==> Downloading https://ghcr.io/v2/homebrew/core/sfml/manifests/2.5.1
+    ==> Downloading from https://ghcr.io/v2/homebrew/core/sfml/blobs/sha256:<hash>
+    ...
+    ```
+
 - **Installation of ninja (build system)**
 
     Install the ninja-build-system:
@@ -50,8 +72,8 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     in _macOs_
     ```bash
     $ brew install ninja
-    ==> Downloading https://formulae.brew.sh/api/formula.jws.json
-    ==> Downloading https://formulae.brew.sh/api/cask.jws.json
+    ==> Downloading https://ghcr.io/v2/homebrew/core/ninja/manifests/1.11.1
+    ==> Downloading from https://ghcr.io/v2/homebrew/core/ninja/blobs/sha256:<hash>
     ...
     ```
 

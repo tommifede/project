@@ -15,7 +15,7 @@ std::string trim(std::string& s)
 }
 
 double read_double(std::string const& var, std::string const& prompt,
-                   double min, double max, bool strict_min)
+                   double min, double max, bool strict)
 {
   while (true) {
     std::cout << prompt;
@@ -42,11 +42,11 @@ double read_double(std::string const& var, std::string const& prompt,
       throw std::invalid_argument("non-numeric input for " + var + ".");
     }
 
-    if ((strict_min && value <= min) || (!strict_min && value < min)) {
+    if ((strict && value <= min) || (!strict && value < min)) {
       throw std::out_of_range(var + " input out of range.");
     }
 
-    if ((strict_min && value >= max) || (!strict_min && value > max)) {
+    if ((strict && value >= max) || (!strict && value > max)) {
       throw std::out_of_range(var + " input out of range.");
     }
 
@@ -119,7 +119,7 @@ SimulationParams ask_simulation_params()
 RendererParams ask_renderer_params()
 {
   RendererParams ren_p;
-  std::cout << "Insert renderer parameter values\n";
+  std::cout << "Insert renderer parameter value\n";
 
   ren_p.size =
       read_size("size", "size (integer, between 800 and 1000): ", 800, 1000);

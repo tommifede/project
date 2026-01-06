@@ -58,7 +58,7 @@ double Simulation::dt() const
   return dt_;
 }
 
-double const& Simulation::get_parameter(std::size_t i) const
+double const& Simulation::getParameter(std::size_t i) const
 {
   if (i > 3) {
     throw std::invalid_argument("parameter index out of range.");
@@ -71,7 +71,7 @@ std::size_t Simulation::steps() const
   return states_.size();
 }
 
-State const& Simulation::state_at(std::size_t i) const
+State const& Simulation::stateAt(std::size_t i) const
 {
   return states_.at(i);
 }
@@ -87,14 +87,14 @@ void Simulation::evolve()
   states_.push_back({x_abs, y_abs, compute_H(x_abs, y_abs)});
 }
 
-void Simulation::evolve_steps(std::size_t add_steps)
+void Simulation::evolveSteps(std::size_t add_steps)
 {
   for (std::size_t i = 0; i < add_steps; ++i) {
     evolve();
   }
 }
 
-void Simulation::evolve_time(double T)
+void Simulation::evolveTime(double T)
 {
   double n = T / dt_;
   if (T < 0) {
@@ -105,6 +105,6 @@ void Simulation::evolve_time(double T)
   }
 
   std::size_t steps = static_cast<std::size_t>(std::round(n));
-  evolve_steps(steps);
+  evolveSteps(steps);
 }
 } // namespace lotka_volterra

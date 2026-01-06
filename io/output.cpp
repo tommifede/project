@@ -13,7 +13,7 @@ void output_csv(lotka_volterra::Simulation const& simulation,
 
   file << "step,x,y,H\n";
   for (std::size_t i = 0; i < simulation.steps(); ++i) {
-    lotka_volterra::State const& state = simulation.state_at(i);
+    lotka_volterra::State const& state = simulation.stateAt(i);
     file << i << "," << state.x << "," << state.y << "," << state.H << "\n";
   }
 }

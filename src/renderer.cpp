@@ -82,10 +82,10 @@ double Renderer::scale(double world_max, float axis_offset, sf::View ui_view)
 void Renderer::update_trajectory(Simulation const& simulation,
                                  std::size_t current_step)
 {
-  double H0 = simulation.state_at(0).H;
+  double H0 = simulation.stateAt(0).H;
 
   for (std::size_t i = last_step_drawn_; i < current_step; ++i) {
-    State const& state = simulation.state_at(i);
+    State const& state = simulation.stateAt(i);
     trajectory_.append(
         {{static_cast<float>(state.x), static_cast<float>(state.y)},
          color_energy(state.H, H0)});
@@ -114,13 +114,13 @@ void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation,
                        std::size_t current_step, sf::View const& ui_view,
                        sf::View& world_view, double margin, float axis_offset)
 {
-  x_eq_  = simulation.get_parameter(3) / simulation.get_parameter(2);
-  y_eq_  = simulation.get_parameter(0) / simulation.get_parameter(1);
+  x_eq_  = simulation.getParameter(3) / simulation.getParameter(2);
+  y_eq_  = simulation.getParameter(0) / simulation.getParameter(1);
   max_x_ = x_eq_;
   max_y_ = y_eq_;
 
   for (std::size_t i = 0; i < current_step; ++i) {
-    State const& state = simulation.state_at(i);
+    State const& state = simulation.stateAt(i);
     max_x_             = std::max(max_x_, std::abs(state.x));
     max_y_             = std::max(max_y_, std::abs(state.y));
   }
@@ -234,7 +234,8 @@ void Renderer::drawTrajectory(sf::RenderWindow& window,
   window.draw(trajectory_);
 }
 
-void Renderer::drawEqPoint(sf::RenderWindow& window, sf::View const& world_view)
+void Renderer::drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view,
+                            sf::View const& world_view)
 {
   window.setView(world_view);
 
@@ -245,6 +246,15 @@ void Renderer::drawEqPoint(sf::RenderWindow& window, sf::View const& world_view)
   eq_point.setPosition({static_cast<float>(x_eq_), static_cast<float>(y_eq_)});
 
   window.draw(eq_point);
+
+  window.setView(ui_view);
+
+  sf::CircleShape origin_eq_point(eq_point_radius_);
+  origin_eq_point.setFillColor(sf::Color::Cyan);
+  origin_eq_point.setOrigin(eq_point_radius_, eq_point_radius_);
+  origin_eq_point.setPosition({axis_offset_, y0_});
+
+  window.draw(origin_eq_point);
 }
 
 void Renderer::drawTitles(sf::RenderWindow& window, sf::View const& ui_view)
@@ -309,9 +319,9 @@ void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation,
   setDraw(window, simulation, current_step, ui_view, world_view);
   drawTicks(window, ui_view);
   drawAxes(window, ui_view);
-  drawEqPoint(window, world_view);
   drawTrajectory(window, simulation, current_step, world_view);
   drawTitles(window, ui_view);
+  drawEqPoints(window, ui_view, world_view);
 }
 
 void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation)

@@ -24,7 +24,7 @@ struct RendererParams
 };
 
 double read_double(std::string const& var, std::string const& prompt,
-                   double min, double max, bool strict_min = true);
+                   double min, double max, bool strict = true);
 std::size_t read_size(std::string const& var, std::string const& prompt,
                       std::size_t min, std::size_t max);
 SimulationParams ask_simulation_params();
