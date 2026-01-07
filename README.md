@@ -121,9 +121,10 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     -- Check for working CXX compiler: /usr/bin/c++ - skipped
     -- Detecting CXX compile features
     -- Detecting CXX compile features - done
-    -- Configuring done (1.0s)
-    -- Generating done (0.1s)
-    -- Build files have been written to: /home/project_name/build
+    -- Found SFML 2.6.1 in /usr/lib/x86_64-linux-gnu/cmake/SFML
+    -- Configuring done (0.3s)
+    -- Generating done (0.0s)
+    -- Build files have been written to: /home/tommaso/project_name/build
     ```
 
 - **Compiling and testing**
@@ -131,31 +132,31 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     First, compile the program in _Debug_ mode and test it:
     ```bash
     $ cmake --build build --config Debug
-    [11/11] Linking CXX executable Debug/project_test
+    [12/12] Linking CXX executable Debug/project_test
     $ cmake --build build --config Debug --target test
     [0/1] Running tests...
-    Test project /home/tommaso/project/build
+    Test project /home/tommaso/project_name/build
         Start 1: project_test
-    1/1 Test #1: project_test .....................   Passed    0.60 sec
+    1/1 Test #1: project_test .....................   Passed    0.30 sec
 
     100% tests passed, 0 tests failed out of 1
 
-    Total Test time (real) =   0.61 sec
+    Total Test time (real) =   0.30 sec
     ```
 
     Then, compile it in _Release_ mode and test it:
     ```bash
     $ cmake --build build --config Release
-    [11/11] Linking CXX executable Release/project
+    [12/12] Linking CXX executable Release/project
     $ cmake --build build --config Release --target test
     [0/1] Running tests...
-    Test project /home/tommaso/project/build
+    Test project /home/tommaso/project_name/build
         Start 1: project_test
-    1/1 Test #1: project_test .....................   Passed    0.27 sec
+    1/1 Test #1: project_test .....................   Passed    0.16 sec
 
     100% tests passed, 0 tests failed out of 1
 
-    Total Test time (real) =   0.28 sec
+    Total Test time (real) =   0.16 sec
     ```
 
 - **Running**
