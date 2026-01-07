@@ -18,7 +18,7 @@ struct SimulationParams
   double y0;
 };
 
-struct RendererParams
+struct RendererParam
 {
   std::size_t size;
 };
@@ -28,10 +28,10 @@ double read_double(std::string const& var, std::string const& prompt,
 std::size_t read_size(std::string const& var, std::string const& prompt,
                       std::size_t min, std::size_t max);
 SimulationParams ask_simulation_params();
-RendererParams ask_renderer_params();
+RendererParam ask_renderer_param();
 lotka_volterra::Simulation input_simulation(SimulationParams sim_p);
 lotka_volterra::Simulation input_simulation();
-lotka_volterra::Renderer input_renderer(RendererParams ren_p);
+lotka_volterra::Renderer input_renderer(RendererParam ren_p);
 lotka_volterra::Renderer input_renderer();
 double input_T(lotka_volterra::Simulation const& sim);
 } // namespace io

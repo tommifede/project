@@ -1,8 +1,9 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
-#include "../include/simulation.hpp"
+#include "../include/input.hpp"
 #include "../include/output.hpp"
+#include "../include/simulation.hpp"
 #include <cmath>
 
 TEST_CASE("Simulation constructor works and initialize correctly")
@@ -206,4 +207,19 @@ TEST_CASE("CSV output works correctly")
   lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1.);
   sim.evolveTime(1.);
   io::output_csv(sim, "trajectory.csv");
+}
+
+TEST_CASE("Simulation input creates a proper simulation")
+{
+  CHECK_NOTHROW(io::input_simulation({0.001, 1., 1., 1., 1., 1., 1.}));
+
+  lotka_volterra::Simulation sim =
+      io::input_simulation({0.001, 1., 1., 1., 1., 1., 1.});
+  CHECK(sim.dt() == 0.001);
+
+  CHECK_THROWS(io::input_simulation({0.1, 1., 1., 1., 1., 1., 1.}));
+  CHECK_THROWS(io::input_simulation({0.01, 0., 1., 1., 1., 1., 1.}));
+  CHECK_THROWS(io::input_simulation({0.01, 1., -1., 1., 1., 1., 1.}));
+  CHECK_THROWS(io::input_simulation({0.1, 1., 1., 1., 1., -1., 1.}));
+  CHECK_THROWS(io::input_simulation({0.1, 1., 1., 1., 1., 1., -1.}));
 }

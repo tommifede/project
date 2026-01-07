@@ -23,7 +23,6 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     - _renderer.cpp_
     - _simulation.cpp_
 - **test/**: unit tests
-    - _main_test.cpp_
     - _renderer_test.cpp_
     - _simulation_test.cpp_
 - _CMakeLists.txt_: build configuration

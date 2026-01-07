@@ -116,9 +116,9 @@ SimulationParams ask_simulation_params()
   return sim_p;
 }
 
-RendererParams ask_renderer_params()
+RendererParam ask_renderer_param()
 {
-  RendererParams ren_p;
+  RendererParam ren_p;
   std::cout << "Insert renderer parameter value\n";
 
   ren_p.size =
@@ -143,7 +143,7 @@ lotka_volterra::Simulation input_simulation()
   return simulation;
 }
 
-lotka_volterra::Renderer input_renderer(RendererParams ren_p)
+lotka_volterra::Renderer input_renderer(RendererParam ren_p)
 {
   lotka_volterra::Renderer renderer(ren_p.size);
 
@@ -152,7 +152,7 @@ lotka_volterra::Renderer input_renderer(RendererParams ren_p)
 
 lotka_volterra::Renderer input_renderer()
 {
-  lotka_volterra::Renderer renderer = input_renderer(ask_renderer_params());
+  lotka_volterra::Renderer renderer = input_renderer(ask_renderer_param());
 
   return renderer;
 }

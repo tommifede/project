@@ -1,6 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
+#include "../include/input.hpp"
 #include "../include/renderer.hpp"
 
 TEST_CASE("Renderer constructor rejects width and height out of range")
@@ -44,3 +45,12 @@ TEST_CASE("Renderer draws equilibrium point and draws axes without crashing")
   CHECK_NOTHROW(r.drawEqPoints(window, view, view));
   CHECK_NOTHROW(r.drawAxes(window, view));
 }
+
+TEST_CASE("Renderer input creates a proper renderer")
+{
+  lotka_volterra::Renderer r = io::input_renderer({800});
+  CHECK(r.getSize() == 800);
+
+  CHECK_THROWS(io::input_renderer({700}));
+} 
+
