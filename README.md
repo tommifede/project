@@ -124,7 +124,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     -- Found SFML 2.6.1 in /usr/lib/x86_64-linux-gnu/cmake/SFML
     -- Configuring done (0.3s)
     -- Generating done (0.0s)
-    -- Build files have been written to: /home/tommaso/project_name/build
+    -- Build files have been written to: /home/user/project_name/build
     ```
 
 - **Compiling and testing**
