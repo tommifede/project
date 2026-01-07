@@ -41,7 +41,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 
     in _linux_
     ```bash
-    sudo apt install libsfml-dev
+    $ sudo apt install libsfml-dev
     Reading package lists... Done
     Building dependency tree... Done
     Reading state information... Done
@@ -50,7 +50,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 
     in _macOs_
     ```bash
-    brew install sfml
+    $ brew install sfml
     ==> Downloading https://ghcr.io/v2/homebrew/core/sfml/manifests/2.5.1
     ==> Downloading from https://ghcr.io/v2/homebrew/core/sfml/blobs/sha256:<hash>
     ...
@@ -79,7 +79,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 
     To verify the installation:
     ```bash
-    ninja --version
+    $ ninja --version
     1.11.1
     ```
 
