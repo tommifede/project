@@ -1,6 +1,8 @@
-#include "doctest.h"
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest/doctest.h>
 
 #include "../include/simulation.hpp"
+#include "../include/output.hpp"
 #include <cmath>
 
 TEST_CASE("Simulation constructor works and initialize correctly")
@@ -16,7 +18,7 @@ TEST_CASE("Simulation constructor works and initialize correctly")
   double expected_H =
       -4. * std::log(5.) + 3. * 5. + 2. * 6. - 1. * std::log(6.);
   CHECK(s0.H == doctest::Approx(expected_H));
-} 
+}
 
 TEST_CASE("Simulation evolves correctly")
 {
@@ -57,6 +59,9 @@ TEST_CASE("Evolve with time T")
   sim.evolveTime(0.1);
 
   CHECK(sim.steps() == 101);
+  CHECK_THROWS(sim.evolveTime(0.0001));
+  CHECK_THROWS(sim.evolveTime(0.1115));
+  CHECK_NOTHROW(sim.evolveTime(0.001));
 }
 
 TEST_CASE("Extinction of prey keeps x at zero")
@@ -194,4 +199,11 @@ TEST_CASE("Estimate numerical convergence order")
   // Ordine di convergenza p ≈ log(error1/error2)/log(dt1/dt2)
   double p = std::log(error1 / error2) / std::log(dt1 / dt2);
   CHECK(p == doctest::Approx(1.).epsilon(0.01));
+}
+
+TEST_CASE("CSV output works correctly")
+{
+  lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1.);
+  sim.evolveTime(1.);
+  io::output_csv(sim, "trajectory.csv");
 }

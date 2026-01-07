@@ -100,6 +100,8 @@ void Simulation::evolveTime(double T)
   if (T < 0) {
     throw std::invalid_argument("T must be positive.");
   }
+  if (T > 0) {
+  }
   if (std::abs(n - std::round(n)) > 1e-8) {
     throw std::invalid_argument("T must be multiple of dt.");
   }

@@ -48,14 +48,19 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/font.ttf DESTINATION ${CMAKE_CURRENT_BINAR
 if (BUILD_TESTING)
 
   # aggiungi l'eseguibile progetto.t
-  add_executable(project_test src/simulation.cpp src/renderer.cpp test/main_test.cpp test/simulation_test.cpp test/renderer_test.cpp)
+  add_executable(simulation_test src/simulation.cpp io/output.cpp test/simulation_test.cpp)
+  # aggiungi l'eseguibile progetto.t alla lista dei test
+  add_test(NAME simulation_test COMMAND simulation_test)
+
+  # aggiungi l'eseguibile progetto.t
+  add_executable(renderer_test src/simulation.cpp src/renderer.cpp test/renderer_test.cpp)
   # nel caso si usi SFML. analogamente per eventuali altre librerie
-  target_link_libraries(project_test PRIVATE sfml-graphics)
+  target_link_libraries(renderer_test PRIVATE sfml-graphics)
   # include directory (per header e doctest.h)
-  target_include_directories(project_test PRIVATE 
+  target_include_directories(renderer_test PRIVATE 
     include
     ${CMAKE_CURRENT_SOURCE_DIR})
   # aggiungi l'eseguibile progetto.t alla lista dei test
-  add_test(NAME project_test COMMAND project_test)
+  add_test(NAME renderer_test COMMAND renderer_test)
 
 endif()
