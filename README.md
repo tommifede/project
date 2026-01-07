@@ -131,31 +131,35 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     First, compile the program in _Debug_ mode and test it:
     ```bash
     $ cmake --build build --config Debug
-    [12/12] Linking CXX executable Debug/project_test
+    [11/11] Linking CXX executable Debug/simulation_test
     $ cmake --build build --config Debug --target test
     [0/1] Running tests...
-    Test project /home/tommaso/project_name/build
-        Start 1: project_test
-    1/1 Test #1: project_test .....................   Passed    0.30 sec
+    Test project /home/tommaso/project-main/build
+        Start 1: simulation_test
+    1/2 Test #1: simulation_test ..................   Passed    0.07 sec
+        Start 2: renderer_test
+    2/2 Test #2: renderer_test ....................   Passed    0.22 sec
 
-    100% tests passed, 0 tests failed out of 1
+    100% tests passed, 0 tests failed out of 2
 
-    Total Test time (real) =   0.30 sec
+    Total Test time (real) =   0.29 sec
     ```
 
     Then, compile it in _Release_ mode and test it:
     ```bash
     $ cmake --build build --config Release
-    [12/12] Linking CXX executable Release/project
+    [11/11] Linking CXX executable Release/simulation_test
     $ cmake --build build --config Release --target test
     [0/1] Running tests...
-    Test project /home/tommaso/project_name/build
-        Start 1: project_test
-    1/1 Test #1: project_test .....................   Passed    0.16 sec
+    Test project /home/tommaso/project-main/build
+        Start 1: simulation_test
+    1/2 Test #1: simulation_test ..................   Passed    0.01 sec
+        Start 2: renderer_test
+    2/2 Test #2: renderer_test ....................   Passed    0.16 sec
 
-    100% tests passed, 0 tests failed out of 1
+    100% tests passed, 0 tests failed out of 2
 
-    Total Test time (real) =   0.16 sec
+    Total Test time (real) =   0.17 sec
     ```
 
 - **Running**
