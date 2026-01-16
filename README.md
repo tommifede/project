@@ -1,5 +1,14 @@
 # Lotka-Volterra prey-predator simulation
 
+
+
+---
+- [Lotka-Volterra prey-predator simulation](#lotka-volterra-prey-predator-simulation)
+    - [Description](#description)
+    - [Project Structure](#project-structure)
+    - [Instructions](#instructions)
+    - [Implementation](#implementation)
+
 ---
 
 ## Description
@@ -177,3 +186,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     ```
 
     Again, insert the needed parameters and try yourself!
+
+---
+
+## Implementation
