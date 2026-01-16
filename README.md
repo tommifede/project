@@ -8,10 +8,8 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 ---
 
 ## Project Structure
-- **include/**: headesrmaibdo for files
+- **include/**: header files
     - _input.hpp_
-    - _io.hpp_
-    - _lotka_volterra.hpp_
     - _output.hpp_
     - _renderer.hpp_
     - _simulation.hpp_
@@ -131,7 +129,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     First, compile the program in _Debug_ mode and test it:
     ```bash
     $ cmake --build build --config Debug
-    [11/11] Linking CXX executable Debug/simulation_test
+    [11/11] Linking CXX executable Debug/renderer_test
     $ cmake --build build --config Debug --target test
     [0/1] Running tests...
     Test project /home/tommaso/project-main/build
@@ -148,7 +146,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     Then, compile it in _Release_ mode and test it:
     ```bash
     $ cmake --build build --config Release
-    [11/11] Linking CXX executable Release/simulation_test
+    [11/11] Linking CXX executable Release/renderer_test
     $ cmake --build build --config Release --target test
     [0/1] Running tests...
     Test project /home/tommaso/project-main/build

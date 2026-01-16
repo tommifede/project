@@ -1,10 +1,9 @@
 #ifndef SIMULATION_HPP
 #define SIMULATION_HPP
 
-#include "lotka_volterra.hpp"
 #include <vector>
 
-namespace lotka_volterra {
+namespace lotka_volterra { 
 struct State
 {
   double x;

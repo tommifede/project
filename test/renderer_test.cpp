@@ -2,7 +2,6 @@
 #include <doctest/doctest.h>
 
 #include "../include/input.hpp"
-#include "../include/renderer.hpp"
 
 TEST_CASE("Renderer constructor rejects width and height out of range")
 {
@@ -52,5 +51,4 @@ TEST_CASE("Renderer input creates a proper renderer")
   CHECK(r.getSize() == 800);
 
   CHECK_THROWS(io::input_renderer({700}));
-} 
-
+}

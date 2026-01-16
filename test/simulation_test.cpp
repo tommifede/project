@@ -3,8 +3,6 @@
 
 #include "../include/input.hpp"
 #include "../include/output.hpp"
-#include "../include/simulation.hpp"
-#include <cmath>
 
 TEST_CASE("Simulation constructor works and initialize correctly")
 {

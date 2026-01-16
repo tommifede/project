@@ -1,12 +1,9 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
-#include "io.hpp"
 #include "renderer.hpp"
-#include "simulation.hpp"
-#include <cstddef>
 
-namespace io {
+namespace io { 
 struct SimulationParams
 {
   double dt;

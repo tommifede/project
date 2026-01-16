@@ -4,7 +4,7 @@
 #include "simulation.hpp"
 #include <SFML/Graphics.hpp>
 
-namespace lotka_volterra {
+namespace lotka_volterra { 
 class Renderer
 {
 private:
