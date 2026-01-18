@@ -1,18 +1,39 @@
-# Lotka-Volterra prey-predator simulation
+# Lotka–Volterra Prey–Predator Simulation
 
-
+Project developed by Tommaso Federici.
 
 ---
-- [Lotka-Volterra prey-predator simulation](#lotka-volterra-prey-predator-simulation)
+- [Lotka–Volterra Prey–Predator Simulation](#lotkavolterra-preypredator-simulation)
     - [Description](#description)
+    - [Features](#features)
+    - [Requirements](#requirements)
     - [Project Structure](#project-structure)
     - [Instructions](#instructions)
     - [Implementation](#implementation)
+    - [Author](#author)
 
 ---
 
 ## Description
-C++ project for academic use: Lotka-Volterra prey-predator simulation, unit tests included (Doctest), and graphical rendering using SFML.
+This is a C++ project developed for academic purposes.
+It implements a Lotka–Volterra prey–predator simulation, aiming to collect initial conditions and parameters and to simulate the system's evolution using a discrete-time model.
+It includes unit tests (with Doctest) and graphical rendering (with SFML library).
+
+---
+
+## Features
+- Discrete-time Lotka–Volterra model
+- Interactive input of simulation parameters
+- Real-time graphical visualization using SFML
+- Unit testing with Doctest
+
+---
+
+## Requirements
+- CMake 3.28 or later
+- C++20–compliant compiler
+- SFML 2.6 or later (graphics module)
+- Ninja build system (required for the provided build instructions)
 
 ---
 
@@ -22,7 +43,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     - _output.hpp_
     - _renderer.hpp_
     - _simulation.hpp_
-- **io/**: input/output files
+- **io/**: input/output implementation files
     - _input.cpp_
     - _output.cpp_
 - **src/**: source files
@@ -43,65 +64,63 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 
 - **Installation of SFML (graphics library)**
 
-    Install SFML:
+    Make sure you have **SFML** installed (used for graphical output).
+    If not, please install it through the commands below.
 
-    in _linux_
+    On _Linux_
     ```bash
     $ sudo apt install libsfml-dev
-    Reading package lists... Done
-    Building dependency tree... Done
-    Reading state information... Done
     ...
     ```
 
-    in _macOs_
+    On _macOS_
     ```bash
-    $ brew install sfml
-    ==> Downloading https://ghcr.io/v2/homebrew/core/sfml/manifests/2.5.1
-    ==> Downloading from https://ghcr.io/v2/homebrew/core/sfml/blobs/sha256:<hash>
+    % brew install sfml
     ...
     ```
 
-- **Installation of ninja (build system)**
+- **Installation of CMake and Ninja (build system)**
 
-    Install the ninja-build-system:
+    Make sure you have **CMake** and **Ninja** installed.
+    If not, please install them through the commands below.
 
-    in _linux_
+    On _Linux_
     ```bash
+    $ sudo apt install cmake
+    ...
     $ sudo apt install ninja-build
-    Reading package lists... Done
-    Building dependency tree... Done
-    Reading state information... Done
     ...
     ```
 
-    in _macOs_
+    On _macOS_
     ```bash
-    $ brew install ninja
-    ==> Downloading https://ghcr.io/v2/homebrew/core/ninja/manifests/1.11.1
-    ==> Downloading from https://ghcr.io/v2/homebrew/core/ninja/blobs/sha256:<hash>
+    % brew install cmake
+    ...
+    % brew install ninja
     ...
     ```
 
     To verify the installation:
     ```bash
+    $ cmake --version
+    ...
     $ ninja --version
-    1.11.1
+    ...
     ```
 
 - **Creation of work area**
 
-    Create directory `/home/user/project_name` (with structure above):
+    Create the directory `/home/user/project_name` (with the structure described above):
     ```bash
     $ cd ~
     $ mkdir project_name
     ```
     
-    Alternatively, unzip `/home/user/project_name_.zip` (`/home/user/project-main.zip` if downloaded directly from github):
+    Alternatively, unzip `/home/user/project_name.zip` (`/home/user/project-main.zip` if downloaded directly from GitHub):
     ```bash
     $ cd ~
     $ unzip project_name.zip
-    Archive:  project_name_.zip
+    Archive:  project_name.zip
     ...
     ```
 
@@ -112,7 +131,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
 
 - **Creation of compile area**
 
-    Create and configure directory `project_name/build`, using `CMakeLists.txt` file in current directory (`.`):
+    Create and configure directory `project_name/build`, using the `CMakeLists.txt` file in the current directory (`.`):
     ```bash
     $ cmake -S . -B build -G"Ninja Multi-Config"
     -- The C compiler identification is GNU 13.3.0
@@ -152,7 +171,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     Total Test time (real) =   0.29 sec
     ```
 
-    Then, compile it in _Release_ mode and test it:
+    Then, repeat the same steps in _Release_ mode:
     ```bash
     $ cmake --build build --config Release
     [11/11] Linking CXX executable Release/renderer_test
@@ -177,7 +196,7 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     ...
     ```
 
-    Insert the needed parameters and enjoy the rendering.
+    Insert the required parameters to start the simulation and view the graphical visualization.
 
     Then run that compiled in _Release_ mode:
     ```bash
@@ -185,8 +204,17 @@ C++ project for academic use: Lotka-Volterra prey-predator simulation, unit test
     ...
     ```
 
-    Again, insert the needed parameters and try yourself!
+    Again, insert the required parameters and try yourself!
 
 ---
 
 ## Implementation
+The core simulation logic is implemented in `simulation.cpp`, following the classical Lotka–Volterra equations discretized in time.
+
+---
+
+## Author
+**Tommaso Federici**  
+Alma Mater Studiorum – University of Bologna  
+Bachelor's Degree in Physics (Second Year)  
+Email: tommaso.federici3@studio.unibo.it
