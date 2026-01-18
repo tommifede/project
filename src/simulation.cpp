@@ -1,4 +1,5 @@
 #include "../include/simulation.hpp"
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 
@@ -9,7 +10,7 @@ void Simulation::check_parameters(double dt, double A, double B, double C,
   if (dt <= 0.) {
     throw std::invalid_argument("dt must be > 0.");
   }
-  if (dt > 0.01 || dt < 0.0001) {
+  if (dt != std::clamp(dt, 0.0001, 0.01)) {
     throw std::invalid_argument("dt must be between 0.0001 and 0.01.");
   }
   if (A <= 0. || B <= 0. || C <= 0. || D <= 0.) {
@@ -96,12 +97,11 @@ void Simulation::evolveSteps(std::size_t add_steps)
 
 void Simulation::evolveTime(double T)
 {
-  double n = T / dt_;
   if (T < 0) {
     throw std::invalid_argument("T must be positive.");
   }
-  if (T > 0) {
-  }
+
+  double n = T / dt_;
   if (std::abs(n - std::round(n)) > 1e-8) {
     throw std::invalid_argument("T must be multiple of dt.");
   }

@@ -1,12 +1,15 @@
 #include "../include/renderer.hpp"
 #include <SFML/Graphics.hpp>
+#include <algorithm>
 #include <cmath>
 #include <format>
 
 namespace lotka_volterra {
 void Renderer::check_parameter(std::size_t size)
 {
-  if (size < 800 || size > 1000) {
+  if (size
+      != std::clamp(size, static_cast<std::size_t>(800),
+                    static_cast<std::size_t>(1000))) {
     throw std::invalid_argument("size must be between 800 and 1000.");
   }
 }
@@ -18,7 +21,7 @@ sf::Color Renderer::color_energy(double H, double H0) const
   }
 
   double dH = std::abs(H - H0);
-  double t  = (H0 != 0) ? std::min(dH / std::abs(H0), 1.) : 1.;
+  double t  = (H0 != 0) ? std::clamp(dH / std::abs(H0), 0., 1.) : 1.;
 
   sf::Uint8 r;
   sf::Uint8 g;

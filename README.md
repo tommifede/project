@@ -3,6 +3,7 @@
 Project developed by Tommaso Federici.
 
 ---
+
 - [Lotka–Volterra Prey–Predator Simulation](#lotkavolterra-preypredator-simulation)
     - [Description](#description)
     - [Features](#features)
