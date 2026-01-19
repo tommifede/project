@@ -120,7 +120,8 @@ a
 
 ## Compilation
 > [!NOTE]
-> Make sure you have a C++20–compliant compiler
+> Make sure you have a C++20–compliant compiler.
+
 > If your compiler does not support C++20, please update it or use an alternative compiler that does.
 
 - **Installation of SFML (graphics library)**
