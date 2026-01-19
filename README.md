@@ -34,8 +34,9 @@ It includes unit tests (with Doctest) and graphical rendering (with the SFML lib
 ---
 
 ## Description
-Lotka--Volterra equations are used to describe a simplified prey--predator
+Lotka–Volterra equations are used to describe a simplified prey–predator
 interaction in a given ecosystem:
+
 $$
 \begin{align*}
     \frac{dx}{dt} &= (A - B y(t)) x(t)\\
@@ -48,6 +49,7 @@ their intrinsic reproduction coefficients under sufficient food
 availability, and $B$ and $D$ representing their
 respective mortality coefficients.
 The solution of the system of differential equations has two equilibrium points:
+
 $$
 \begin{align*}
     e_{1} &= (0, 0)\\
@@ -56,6 +58,7 @@ $$
 $$
 
 By discretizing the Lotka–Volterra equations, we obtain:
+
 $$
 \begin{align*}
 x_i &= x_{i-1} + (A - B  y_{i-1}) x_{i-1} \Delta t\\
@@ -65,13 +68,16 @@ $$
 
 Furthermore, by expressing the variables $(x_i, y_i)$ as fractions of the second
 equilibrium point:
+
 $$
 \begin{align*}
 x_i^{rel} &= x_{i} \frac{C}{D} \\
 y_i^{rel} &= y_{i} \frac{B}{A} \\
 \end{align*}
 $$
+
 the discretized equations become:
+
 $$\begin{align*}
 x_i^{rel} &= x_{i-1}^{rel} + A (1 - y_{i-1}^{rel}) x_{i-1}^{rel} \Delta t\\
 y_i^{rel} &= y_{i-1}^{rel} + D (x_{i-1}^{rel} - 1) y_{i-1}^{rel} \Delta t\\
@@ -79,11 +85,13 @@ y_i^{rel} &= y_{i-1}^{rel} + D (x_{i-1}^{rel} - 1) y_{i-1}^{rel} \Delta t\\
 $$
 
 The system possesses a first integral that is conserved over time:
+
 $$
 \begin{align*}
 H(x,y) &= -D\ln(x)+Cx+By-A\ln(y)
 \end{align*}
 $$
+
 Henceforth, the first integral will be denoted as the energy of the system.
 
 ---
