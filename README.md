@@ -1,4 +1,3 @@
-<!-- omit in toc -->
 # Lotka–Volterra Prey–Predator Simulation
 
 Project developed by Tommaso Federici.
@@ -12,7 +11,6 @@ Project developed by Tommaso Federici.
         - [Project Structure](#project-structure)
         - [Design choices](#design-choices)
     - [Compilation](#compilation)
-        - [Requirements](#requirements)
     - [Author](#author)
 
 ---
@@ -121,11 +119,12 @@ a
 ## Compilation
 > [!NOTE]
 > Make sure you have a C++20–compliant compiler.
+> 
 > If your compiler does not support C++20, please update it or use an alternative compiler that does.
 
 - **Installation of SFML (graphics library)**
 
-    Make sure you have **SFML** (version 2.6 or later) installed (used for graphical output).
+    Make sure you have **SFML** (version 2.6 or later) installed.
     If not, please install it through the commands below.
 
     On _Linux_
