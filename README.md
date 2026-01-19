@@ -1,3 +1,4 @@
+<!-- omit in toc -->
 # Lotka–Volterra Prey–Predator Simulation
 
 Project developed by Tommaso Federici.
