@@ -16,9 +16,9 @@ Project developed by Tommaso Federici.
 ---
 
 ## Description
-This is a C++ project developed for academic purposes.
-It implements a Lotka–Volterra prey–predator simulation, aiming to collect initial conditions and parameters and to simulate the system's evolution using a discrete-time model.
-It includes unit tests (with Doctest) and graphical rendering (with the SFML library).
+This is a C++ project developed for academic purposes.  
+It implements a Lotka–Volterra prey–predator simulation, aiming to collect initial conditions and parameters and to simulate the system's evolution using a discrete-time model.  
+It includes unit tests (with Doctest) and graphical rendering (with the SFML library).  
 
 ---
 
