@@ -7,13 +7,12 @@ Project developed by Tommaso Federici.
 
 - [Lotka–Volterra Prey–Predator Simulation](#lotkavolterra-preypredator-simulation)
     - [Introduction](#introduction)
-    - [Features](#features)
     - [Descriptions](#description)
-    - [Requirements](#requirements)
     - [Implementation](#implementation)
         - [Project Structure](#project-structure)
-        - [Design choices]
+        - [Design choices](#design-choices)
     - [Compilation](#compilation)
+        - [Requirements](#requirements)
     - [Author](#author)
 
 ---
@@ -22,14 +21,6 @@ Project developed by Tommaso Federici.
 This is a C++ project developed for academic purposes.  
 It implements a Lotka–Volterra prey–predator simulation, aiming to collect initial conditions and parameters and to simulate the system's evolution using a discrete-time model.  
 It includes unit tests (with Doctest) and graphical rendering (with the SFML library).  
-
----
-
-## Features
-- Discrete-time Lotka–Volterra model
-- Interactive input of simulation parameters
-- Real-time graphical visualization using SFML
-- Unit tests implemented with Doctest
 
 ---
 
@@ -96,14 +87,6 @@ Henceforth, the first integral will be denoted as the energy of the system.
 
 ---
 
-## Requirements
-- CMake 3.28 or later
-- C++20–compliant compiler
-- SFML 2.6 or later (graphics module)
-- Ninja build system (required for the provided build instructions)
-
----
-
 ## Implementation
 
 ### Project Structure
@@ -130,13 +113,19 @@ The root directory contains configuration and utility files, while the source co
 - _font.ttf_: font file
 - _README.md_: this file
 
+### Design Choices
+a
+
 ---
 
 ## Compilation
+> [!NOTE]
+> Make sure you have a C++20–compliant compiler
+> If your compiler does not support C++20, please update it or use an alternative compiler that does.
 
 - **Installation of SFML (graphics library)**
 
-    Make sure you have **SFML** installed (used for graphical output).
+    Make sure you have **SFML** (version 2.6 or later) installed (used for graphical output).
     If not, please install it through the commands below.
 
     On _Linux_
@@ -153,7 +142,7 @@ The root directory contains configuration and utility files, while the source co
 
 - **Installation of CMake and Ninja (build system)**
 
-    Make sure you have **CMake** and **Ninja** installed.
+    Make sure you have **CMake** (version 3.28 or later) and **Ninja** installed.
     If not, please install them through the commands below.
 
     On _Linux_
