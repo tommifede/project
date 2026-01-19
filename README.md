@@ -5,17 +5,19 @@ Project developed by Tommaso Federici.
 ---
 
 - [Lotka–Volterra Prey–Predator Simulation](#lotkavolterra-preypredator-simulation)
-    - [Description](#description)
+    - [Introduction](#introduction)
     - [Features](#features)
+    - [Descriptions](#description)
     - [Requirements](#requirements)
-    - [Project Structure](#project-structure)
-    - [Instructions](#instructions)
     - [Implementation](#implementation)
+        - [Project Structure](#project-structure)
+        - [Design choices]
+    - [Compilation](#compilation)
     - [Author](#author)
 
 ---
 
-## Description
+## Introduction
 This is a C++ project developed for academic purposes.  
 It implements a Lotka–Volterra prey–predator simulation, aiming to collect initial conditions and parameters and to simulate the system's evolution using a discrete-time model.  
 It includes unit tests (with Doctest) and graphical rendering (with the SFML library).  
@@ -30,6 +32,61 @@ It includes unit tests (with Doctest) and graphical rendering (with the SFML lib
 
 ---
 
+## Description
+Lotka--Volterra equations are used to describe a simplified prey--predator
+interaction in a given ecosystem:
+$$
+\begin{align*}
+    \frac{dx}{dt} &= (A - B y(t)) x(t)\\
+    \frac{dy}{dt} &= (C x(t) - D ) y(t)\\
+\end{align*}
+$$
+
+$x(t)$ and $y(t)$ denote the prey and predator populations at time $t$, with $A$ and $C$ representing
+their intrinsic reproduction coefficients under sufficient food
+availability, and $B$ and $D$ representing their
+respective mortality coefficients.
+The solution of the system of differential equations has two equilibrium points:
+$$
+\begin{align*}
+    e_{1} &= (0, 0)\\
+    e_{2} &= \left(\frac{D}{C}, \frac{A}{B} \right)\\
+\end{align*}
+$$
+
+By discretizing the Lotka–Volterra equations, we obtain:
+$$
+\begin{align*}
+x_i &= x_{i-1} + (A - B  y_{i-1}) x_{i-1} \Delta t\\
+y_i &= y_{i-1} + (C x_{i-1} - D ) y_{i-1} \Delta t\\
+\end{align*}
+$$
+
+Furthermore, by expressing the variables $(x_i, y_i)$ as fractions of the second
+equilibrium point:
+$$
+\begin{align*}
+x_i^{rel} &= x_{i} \frac{C}{D} \\
+y_i^{rel} &= y_{i} \frac{B}{A} \\
+\end{align*}
+$$
+the discretized equations become:
+$$\begin{align*}
+x_i^{rel} &= x_{i-1}^{rel} + A (1 - y_{i-1}^{rel}) x_{i-1}^{rel} \Delta t\\
+y_i^{rel} &= y_{i-1}^{rel} + D (x_{i-1}^{rel} - 1) y_{i-1}^{rel} \Delta t\\
+\end{align*}
+$$
+
+The system possesses a first integral that is conserved over time:
+$$
+\begin{align*}
+H(x,y) &= -D\ln(x)+Cx+By-A\ln(y)
+\end{align*}
+$$
+Henceforth, the first integral will be denoted as the energy of the system.
+
+---
+
 ## Requirements
 - CMake 3.28 or later
 - C++20–compliant compiler
@@ -38,7 +95,12 @@ It includes unit tests (with Doctest) and graphical rendering (with the SFML lib
 
 ---
 
-## Project Structure
+## Implementation
+
+### Project Structure
+The project is organized in a hierarchical, tree-like directory structure.  
+The root directory contains configuration and utility files, while the source code is divided into 4 dedicated subdirectories as described below:
+
 - **include/**: header files
     - _input.hpp_
     - _output.hpp_
@@ -61,7 +123,7 @@ It includes unit tests (with Doctest) and graphical rendering (with the SFML lib
 
 ---
 
-## Instructions
+## Compilation
 
 - **Installation of SFML (graphics library)**
 
@@ -168,11 +230,6 @@ It includes unit tests (with Doctest) and graphical rendering (with the SFML lib
     ```
 
     Again, insert the required parameters and try yourself!
-
----
-
-## Implementation
-The core simulation logic is implemented in `simulation.cpp`, following the classical Lotka–Volterra equations discretized in time.
 
 ---
 
