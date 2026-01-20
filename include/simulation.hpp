@@ -3,7 +3,7 @@
 
 #include <vector>
 
-namespace lotka_volterra { 
+namespace lotka_volterra {
 struct State
 {
   double x;
@@ -15,13 +15,9 @@ class Simulation
 {
 private:
   double dt_;
-  double A_;
-  double B_;
-  double C_;
-  double D_;
   double x_rel_;
   double y_rel_;
-  std::vector<double> pars_ = {A_, B_, C_, D_};
+  std::vector<double> pars_;
   std::vector<State> states_;
 
   void check_parameters(double dt, double A, double B, double C, double D,
