@@ -17,13 +17,13 @@ Project developed by Tommaso Federici.
 
 ## Introduction
 This is a C++ project developed for academic purposes.  
-It implements a Lotka–Volterra prey–predator simulation, aiming to collect initial conditions and parameters and to simulate the system's evolution using a discrete-time model.  
-It includes unit tests (with Doctest) and graphical rendering (with the SFML library).  
+It implements a **Lotka–Volterra prey–predator simulation**, aiming to collect initial conditions and parameters and to simulate the system's evolution using a **discrete-time model**.  
+It includes unit tests (with **Doctest**) and graphical rendering (with the **SFML** library).  
 
 ---
 
 ## Description
-Lotka–Volterra equations are used to describe a simplified prey–predator
+**Lotka–Volterra equations** are used to describe a simplified prey–predator
 interaction in a given ecosystem:
 
 $$
@@ -34,10 +34,10 @@ $$
 $$
 
 $x(t)$ and $y(t)$ denote the prey and predator populations at time $t$, with $A$ and $C$ representing
-their intrinsic reproduction coefficients under sufficient food
+their **intrinsic reproduction coefficients** under sufficient food
 availability, and $B$ and $D$ representing their
-respective mortality coefficients.
-The solution of the system of differential equations has two equilibrium points:
+respective **mortality coefficients**.
+The solution of the system of differential equations has two **equilibrium points**:
 
 $$
 \begin{align*}
@@ -65,7 +65,7 @@ y_i^{rel} &= y_{i} \frac{B}{A} \\
 \end{align*}
 $$
 
-the discretized equations become:
+the **discretized equations** become:
 
 $$\begin{align*}
 x_i^{rel} &= x_{i-1}^{rel} + A (1 - y_{i-1}^{rel}) x_{i-1}^{rel} \Delta t\\
@@ -73,7 +73,7 @@ y_i^{rel} &= y_{i-1}^{rel} + D (x_{i-1}^{rel} - 1) y_{i-1}^{rel} \Delta t\\
 \end{align*}
 $$
 
-The system possesses a first integral that is conserved over time:
+The system possesses a **first integral** that is conserved over time:
 
 $$
 \begin{align*}
@@ -81,7 +81,7 @@ H(x,y) &= -D\ln(x)+Cx+By-A\ln(y)
 \end{align*}
 $$
 
-Henceforth, the first integral will be denoted as the energy of the system.
+Henceforth, the first integral will be denoted as the **energy** of the system.
 
 ---
 
@@ -168,29 +168,27 @@ a
     ...
     ```
 
-- **Creation of work area**
+- **Creation of project directory**
 
-    Create the directory `/home/user/project_name` (with the structure described above):
+    Next, create the `project_name/` directory (with the structure described above):
     ```bash
-    $ cd ~
     $ mkdir project_name
     ```
     
-    Alternatively, unzip `/home/user/project_name.zip` (`/home/user/project-main.zip` if downloaded directly from GitHub):
+    Alternatively, unzip `project_name.zip` (`project-main.zip` if downloaded directly from GitHub):
     ```bash
-    $ cd ~
     $ unzip project_name.zip
     ...
     ```
 
-    Now, go inside the work area:
+    Later, navigate to the project directory:
     ```bash
     $ cd project_name
     ```
 
 - **Creation of compile area**
 
-    Create and configure directory `project_name/build`, using the `CMakeLists.txt` file in the current directory (`.`):
+    Create and configure the `build/` directory using the `CMakeLists.txt` file in the current directory (`.`):
     ```bash
     $ cmake -S . -B build -G"Ninja Multi-Config"
     ...
@@ -198,13 +196,13 @@ a
 
 - **Compiling and testing**
 
-    First, compile the program in _Debug_ mode and test it:
+    Now, compile the program in **Debug** mode and test it:
     ```bash
     $ cmake --build build --config Debug
     $ cmake --build build --config Debug --target test
     ```
 
-    Then, repeat the same steps in _Release_ mode:
+    Then, repeat the same steps in **Release** mode:
     ```bash
     $ cmake --build build --config Release
     $ cmake --build build --config Release --target test
@@ -212,7 +210,7 @@ a
 
 - **Running**
 
-    First, run the executable compiled in _Debug_ mode:
+    Finally, run the executable compiled in **Debug** mode:
     ```bash
     $ ./build/Debug/project
     ...
@@ -220,7 +218,7 @@ a
 
     Insert the required parameters to start the simulation and view the graphical visualization.
 
-    Then run that compiled in _Release_ mode:
+    Possibly, run that compiled in **Release** mode:
     ```bash
     $ ./build/Release/project
     ...
