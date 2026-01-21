@@ -10,7 +10,14 @@ Project developed by Tommaso Federici.
     - [Implementation](#implementation)
         - [Project Structure](#project-structure)
         - [Design choices](#design-choices)
+            - [Simulation](#simulation)
+            - [Renderer](#renderer)
+            - [I/O](#io)
+            - [Main](#main)
     - [Compilation](#compilation)
+    - [Results](#results)
+    - [Testing](#testing)
+    - [Use of AI](#use-of-ai)
     - [Author](#author)
 
 ---
@@ -86,6 +93,7 @@ Henceforth, the first integral will be denoted as the **energy** of the system.
 ---
 
 ## Implementation
+Hereinafter, the main project decisions are described and motivated.
 
 ### Project Structure
 The project is organized in a hierarchical, tree-like directory structure.  
@@ -112,7 +120,29 @@ The root directory contains configuration and utility files, while the source co
 - _README.md_: this file
 
 ### Design Choices
-a
+The project is structured in a modular way, separating numerical simulation, graphical rendering, and input/output handling into independent components.    
+All the code related to the Lotka–Volterra model is contained in the `lotka_volterra` namespace, while input/output functionality is implemented within the `io` namespace.
+
+#### Simulation
+The simulation of the Lotka–Volterra system is implemented through a `Simulation` class.    
+The state of the system at each time step is represented by a `State` struct, containing the populations $x$, $y$ and the value of the first integral $H$.    
+The `Simulation` class stores the time step `dt_`, the relative variables `x_rel_` and `y_rel_`, a vector of states `states_`, and a vector of model parameters `pars_`.    
+Private methods are used to check parameter validity, perform a single integration step, and compute the energy.    
+The public interface allows access to the simulation data and provides methods to evolve the system by one step, by a fixed number of steps, or over a given time interval.
+
+#### Renderer
+[...]
+
+#### I/O
+[...]
+
+#### Main
+[...]
+
+---
+
+## Input–Output
+[...]
 
 ---
 
@@ -225,6 +255,21 @@ a
     ```
 
     Again, insert the required parameters and try yourself!
+
+---
+
+## Results
+[...]
+
+---
+
+## Testing
+[...]
+
+---
+
+## Use of AI
+[...]
 
 ---
 
