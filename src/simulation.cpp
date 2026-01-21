@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cmath>
 #include <fstream>
+#include <cassert>
 
 namespace lotka_volterra {
 void Simulation::check_parameters(double dt, double A, double B, double C,
@@ -48,10 +49,7 @@ double Simulation::compute_H(double x, double y) const
 
 Simulation::Simulation(double dt, double A, double B, double C, double D,
                        double x0, double y0)
-    : dt_{dt} // , A_{A}
-              // , B_{B}
-              // , C_{C}
-              // , D_{D}
+    : dt_{dt}
     , x_rel_{x0 * C / D}
     , y_rel_{y0 * B / A}
     , pars_{{A, B, C, D}}

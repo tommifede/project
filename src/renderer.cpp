@@ -87,14 +87,14 @@ void Renderer::update_trajectory(Simulation const& simulation,
 {
   double H0 = simulation.stateAt(0).H;
 
-  for (std::size_t i = last_step_drawn_; i < current_step; ++i) {
+  for (std::size_t i = last_drawn_step_; i < current_step; ++i) {
     State const& state = simulation.stateAt(i);
     trajectory_.append(
         {{static_cast<float>(state.x), static_cast<float>(state.y)},
          color_energy(state.H, H0)});
   }
 
-  last_step_drawn_ = current_step;
+  last_drawn_step_ = current_step;
 }
 
 

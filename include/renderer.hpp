@@ -19,7 +19,7 @@ private:
   double max_y_;
   float axis_offset_;
   sf::VertexArray trajectory_{sf::LineStrip};
-  std::size_t last_step_drawn_ = 0;
+  std::size_t last_drawn_step_ = 0;
   sf::Text label_;
   sf::Font font_;
   int tick_count_               = 10;
