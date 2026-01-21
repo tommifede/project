@@ -43,7 +43,8 @@ $$
 $x(t)$ and $y(t)$ denote the prey and predator populations at time $t$, with $A$ and $C$ representing
 their **intrinsic reproduction coefficients** under sufficient food
 availability, and $B$ and $D$ representing their
-respective **mortality coefficients**.
+respective **mortality coefficients**.    
+    
 The solution of the system of differential equations has two **equilibrium points**:
 
 $$
@@ -127,11 +128,25 @@ All the code related to the Lotka–Volterra model is contained in the `lotka_vo
 The simulation of the Lotka–Volterra system is implemented through a `Simulation` class.    
 The state of the system at each time step is represented by a `State` struct, containing the populations $x$, $y$ and the value of the first integral $H$.    
 The `Simulation` class stores the time step `dt_`, the relative variables `x_rel_` and `y_rel_`, a vector of states `states_`, and a vector of model parameters `pars_`.    
-Private methods are used to check parameter validity, perform a single integration step, and compute the energy.    
-The public interface allows access to the simulation data and provides methods to evolve the system by one step, by a fixed number of steps, or over a given time interval.
+    
+Private methods are used to check parameter validity, perform a single integration step, and compute the energy. The public interface allows access to the simulation data and provides methods to evolve the system by one step, by a fixed number of steps, or over a given time interval.
+
+All simulation parameters are verified at **run time** whenever they are provided to the system – either through the constructor, the `getParameter` accessor, or the `evolveTime` method – to ensure they are physically meaningful and numerically valid (e.g. positive populations, strictly positive time step, valid coefficients).    
+    
+Checks are performed using `throw` statements rather than `assert`, allowing errors to be reported clearly and preventing the simulation from evolving with inconsistent or invalid configurations.
 
 #### Renderer
-[...]
+The `Renderer` class handles the graphical representation of the Lotka–Volterra simulation using SFML.    
+It separates private members, which store internal state such as window size, axis scales, maximum world extents, trajectory points, last drawn step, text labels and others, from public methods that provide the drawing interface and configuration.    
+    
+Private methods compute tick steps, world scaling, and manage incremental trajectory updates via `last_drawn_step_` and `sf::VertexArray`, ensuring that only newly evolved points are processed at each step to optimize performance. The public interface includes the constructor, a getter for window size, a `setDraw` method to configure views and scaling based on current simulation state, and two overloaded `draw` methods: one to render up to a specific step, useful for animated evolution, and one to draw the full trajectory at once.
+    
+Rendering uses two separate views: `ui_view` for fixed interface elements such as axes, labels, and titles, and `world_view` for the dynamic simulation space, allowing independent scaling and panning without affecting the user interface.    
+Trajectory points are colored according to deviations from the initial energy, providing a direct visual cue of the system's energetic changes, while equilibrium points are highlighted in distinct colors.    
+    
+Tick steps and axis scales are dynamically computed from the simulation's current maximum populations and a configurable margin, ensuring consistent and readable visualization across different system parameters and window sizes.    
+    
+All parameters passed to the renderer are validated at run time using `throw` statements, preventing invalid configurations.
 
 #### I/O
 [...]
