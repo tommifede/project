@@ -272,8 +272,8 @@ An example of the rendered trajectory is shown below:
 
 <div align="center">
   <img src="trajectory.png" width="80%">
-</div>
-
+</div>       
+<br>
 The numerical output can be exported to a CSV file containing the full simulation history, with one row per time step and columns for time, prey and predator populations and the value of the first integral.    
     
 Degenerate initial conditions are handled consistently: if $x_0 = 0$ or $y_0 = 0$, the trajectory lies on the corresponding axis, while if $x_0 = y_0 = 0$ the system remains at the origin. In all cases, no populations are generated from zero.
