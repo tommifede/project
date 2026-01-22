@@ -189,14 +189,14 @@ An example of valid interactive input is summarized below:
 | Parameter    | Value |
 |:------------:|:-----:|
 | $dt$         | 0.001 |
-| $A$          | 30    |
-| $B$          | 10    |
-| $C$          | 20    |
-| $D$          | 40    |
-| $x_0$        | 3     |
+| $A$          | 10    |
+| $B$          | 6     |
+| $C$          | 4     |
+| $D$          | 12    |
+| $x_0$        | 4     |
 | $y_0$        | 3     |
-| $T$          | 10    |
 | $size$       | 1000  |
+| $T$          | 10    |
 
 </div>
 
@@ -258,7 +258,25 @@ $ ./build/Release/project
 ---
 
 ## Results
-[...]
+For valid input parameters (e.g. those reported in the table above), the program correctly produces both graphical and numerical outputs.    
+    
+The graphical output consists of the trajectory of the system in the $x - y$ phase plane, which can be displayed either incrementally (animated evolution) or as the complete trajectory. A clear and stable visualization is obtained when the initial conditions are chosen close to the non-trivial equilibrium point
+
+$$
+\begin{align*}
+    e_{2} &= \left(\frac{D}{C}, \frac{A}{B} \right)
+\end{align*}
+$$
+
+An example of the rendered trajectory is shown below:
+
+<div align="center">
+  <img src="trajectory.png" width="80%">
+</div>
+
+The numerical output can be exported to a CSV file containing the full simulation history, with one row per time step and columns for time, prey and predator populations and the value of the first integral.    
+    
+Degenerate initial conditions are handled consistently: if $x_0 = 0$ or $y_0 = 0$, the trajectory lies on the corresponding axis, while if $x_0 = y_0 = 0$ the system remains at the origin. In all cases, no populations are generated from zero.
 
 ---
 
