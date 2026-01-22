@@ -10,14 +10,17 @@ Project developed by Tommaso Federici.
     - [Implementation](#implementation)
         - [Project Structure](#project-structure)
         - [Design choices](#design-choices)
-            - [Simulation](#simulation)
-            - [Renderer](#renderer)
-            - [I/O](#io)
-            - [Main](#main)
+            - [Simulation implementation](#simulation-implementation)
+            - [Renderer implementation](#renderer-implementation)
+            - [I/O implementation](#io-implementation)
+            - [Main implementation](#main-implementation)
     - [Input–Output](#inputoutput)
     - [Compilation](#compilation)
     - [Results](#results)
     - [Testing](#testing)
+        - [Simulation tests](#simulation-tests)
+        - [Renderer tests](#renderer-tests)
+        - [I/O tests](#io-tests)
     - [Use of AI](#use-of-ai)
     - [Author](#author)
 
@@ -130,14 +133,14 @@ The project adopts a systematic validation of parameters and inputs at **run tim
 Error handling is implemented using 'throw' statements rather than `assert`, allowing configuration errors to be detected and reported at run time.    
 This prevents the simulation and the renderer from operating on invalid or inconsistent states.
 
-#### Simulation
+#### Simulation implementation
 The simulation of the Lotka–Volterra system is implemented through a `Simulation` class.    
 The state of the system at each time step is represented by a `State` struct, containing the populations $x$, $y$ and the value of the first integral $H$.    
 The `Simulation` class stores the time step `dt_`, the relative variables `x_rel_` and `y_rel_`, a vector of states `states_` and a vector of model parameters `pars_`.    
     
 Private methods are used to check parameter validity, perform a single integration step and compute the energy. The public interface allows access to the simulation data and provides methods to evolve the system by one step, by a fixed number of steps or over a given time interval.
 
-#### Renderer
+#### Renderer implementation
 The `Renderer` class handles the graphical representation of the Lotka–Volterra simulation using SFML.    
 It separates private members, which store internal state such as window size, axis scales, maximum world extents, trajectory points, last drawn step, text labels and others, from public methods that provide the drawing interface and configuration.    
     
@@ -151,7 +154,7 @@ Trajectory points are colored according to deviations from the initial energy, p
     
 Tick steps and axis scales are dynamically computed from the simulation's current maximum populations and a configurable margin, ensuring consistent and readable visualization across different system parameters and window sizes.
 
-#### I/O
+#### I/O implementation
 Input and output operations are handled by a dedicated set of functions and are designed to be independent from the numerical core of the simulation, in order to improve modularity and maintainability.    
     
 The simulation parameters and initial conditions can be provided in two different ways:
@@ -160,7 +163,7 @@ The simulation parameters and initial conditions can be provided in two differen
     
 The output functionality provides a method to export the simulation data to a **CSV file**. At the end of the simulation, all recorded states (including time, prey and predator populations and the corresponding energy values) are written to disk in a structured, comma-separated format, allowing the results to be easily analyzed or post-processed using external tools.
 
-#### Main
+#### Main implementation
 The `main.cpp` file manages the execution of the simulation and the rendering of results.    
 It first collects simulation parameters, initial conditions and rendering settings, either interactively from the user or programmatically from pre-defined values. A rendering window is created using SFML with customizable settings such as antialiasing (enabled to improve the visual smoothness of the trajectories and reduce jagged edges). 
     
@@ -206,114 +209,51 @@ These outputs allow the user to visualize and analyze the simulation results, bu
 ---
 
 ## Compilation
-> [!NOTE]
+> [!IMPORTANT]
 > Make sure you have a C++20–compliant compiler.
 > 
 > If your compiler does not support C++20, please update it or use an alternative compiler that does.
 
-- **Installation of SFML (graphics library)**
+The following dependencies are required:
+- **SFML** (version 2.6 or later)
+- **CMake** (version 3.28 or later)
+- **Ninja**
 
-    Make sure you have **SFML** (version 2.6 or later) installed.
-    If not, please install it through the commands below.
+To install them, please follow the commands below.    
 
-    On _Linux_
-    ```bash
-    $ sudo apt install libsfml-dev
-    ...
-    ```
-
-    On _macOS_
-    ```bash
-    % brew install sfml
-    ...
-    ```
-
-- **Installation of CMake and Ninja (build system)**
-
-    Make sure you have **CMake** (version 3.28 or later) and **Ninja** installed.
-    If not, please install them through the commands below.
-
-    On _Linux_
-    ```bash
-    $ sudo apt install cmake
-    ...
-    $ sudo apt install ninja-build
-    ...
-    ```
-
-    On _macOS_
-    ```bash
-    % brew install cmake
-    ...
-    % brew install ninja
-    ...
-    ```
-
-    To verify the installation:
-    ```bash
-    $ cmake --version
-    ...
-    $ ninja --version
-    ...
-    ```
-
-- **Creation of project directory**
-
-    Next, create the `project_name/` directory (with the structure described above):
-    ```bash
-    $ mkdir project_name
-    ```
-    
-    Alternatively, unzip `project_name.zip` (`project-main.zip` if downloaded directly from GitHub):
-    ```bash
-    $ unzip project_name.zip
-    ...
-    ```
-
-    Later, navigate to the project directory:
-    ```bash
-    $ cd project_name
-    ```
-
-- **Creation of compile area**
-
-    Create and configure the `build/` directory using the `CMakeLists.txt` file in the current directory (`.`):
-    ```bash
-    $ cmake -S . -B build -G"Ninja Multi-Config"
-    ...
-    ```
-
-- **Compiling and testing**
-
-    Now, compile the program in **Debug** mode and test it:
-    ```bash
-    $ cmake --build build --config Debug
-    $ cmake --build build --config Debug --target test
-    ```
-
-    Then, repeat the same steps in **Release** mode:
-    ```bash
-    $ cmake --build build --config Release
-    $ cmake --build build --config Release --target test
-    ```
-
-- **Running**
-
-    Finally, run the executable compiled in **Debug** mode:
-    ```bash
-    $ ./build/Debug/project
-    ...
-    ```
-
-    Insert the required parameters to start the simulation and view the graphical visualization.
-
-    Possibly, run that compiled in **Release** mode:
-    ```bash
-    $ ./build/Release/project
-    ...
-    ```
-
-    Again, insert the required parameters and try yourself!
+On Linux:
+```bash
+$ sudo apt install libsfml-dev
+$ sudo apt install cmake
+$ sudo apt install ninja-build
+```
+On macOS:
+```bash
+% brew install sfml
+% brew install cmake
+% brew install ninja
+```
+Next, unzip `project.zip` (`project-main.zip` if downloaded directly from GitHub) and navigate to the project directory:
+```bash
+$ unzip project.zip
+$ cd project
+```
+Then, create and configure the `build/` directory using the `CMakeLists.txt` file located in the current directory:
+```bash
+$ cmake -S . -B build -G"Ninja Multi-Config"
+```
+Finally, compile the program and run the tests in either **Debug** or **Release** mode:
+```bash
+$ cmake --build build --config Debug
+$ cmake --build build --config Debug --target test
+$ cmake --build build --config Release
+$ cmake --build build --config Release --target test
+```
+The executable can then be run in either configuration:
+```bash
+$ ./build/Debug/project
+$ ./build/Release/project
+```
 
 ---
 
@@ -323,7 +263,27 @@ These outputs allow the user to visualize and analyze the simulation results, bu
 ---
 
 ## Testing
-[...]
+The project is validated through a comprehensive set of **unit tests** implemented using the **Doctest** framework. Testing focuses on the numerical correctness of the Lotka–Volterra simulation, the validation of input and parameters and the robustness of the rendering and I/O components.
+
+### Simulation tests
+The numerical core of the project is extensively tested to ensure physical consistency and numerical reliability. In particular, the tests verify:
+- correct initialization of the simulation state and energy;
+- proper handling of invalid parameters through exception throwing;
+- correctness of time evolution using both fixed step counts and total simulation time;
+- correct behavior in extinction scenarios, ensuring populations remain zero when appropriate;
+- approximate conservation of the first integral (energy);
+- convergence of the numerical solution under time step refinement;
+- assessment of the first-order accuracy of the discretization.
+
+### Renderer tests
+The rendering subsystem is tested to ensure robustness and correct parameter validation.
+Since graphical output is platform-dependent, tests focus on non-visual aspects and verify that:
+- invalid window sizes are rejected;
+- rendering functions execute without runtime errors for valid inputs;
+- drawing functions correctly handle full and partial trajectories.
+
+### I/O tests
+Input and output functions are also tested to verify correct construction of simulation and renderer objects from validated input and successful export of simulation data to CSV format.
 
 ---
 
