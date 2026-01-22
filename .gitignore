@@ -1,26 +1,30 @@
-# Cartella di build di CMake
+# CMake files
 /build/
 /CMakeFiles/
 /CMakeCache.txt
 
-# File temporanei di compilazione
+# Compilation files
 *.o
 *.obj
 *.exe
 *.out
 
-# File generati dal sistema
+# System files
 *.log
 *.DS_Store
 __MACOSX/
 *_Zone.Identifier
 
-# File generati da editor
+# Editor files
 *.swp
 *.swo
 *.vscode/
 
-# File di output
+# Output
 *.csv
 
+# Course
 pf2024.pdf
+
+# Format files
+.clang-format
