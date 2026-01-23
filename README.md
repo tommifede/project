@@ -1,28 +1,23 @@
 # Lotka–Volterra Prey–Predator Simulation
 
-Project developed by Tommaso Federici.
-
----
-
-- [Lotka–Volterra Prey–Predator Simulation](#lotkavolterra-preypredator-simulation)
-    - [Introduction](#introduction)
-    - [Descriptions](#description)
-    - [Implementation](#implementation)
-        - [Project Structure](#project-structure)
-        - [Design choices](#design-choices)
-            - [Simulation implementation](#simulation-implementation)
-            - [Renderer implementation](#renderer-implementation)
-            - [I/O implementation](#io-implementation)
-            - [Main implementation](#main-implementation)
-    - [Input–Output](#inputoutput)
-    - [Compilation](#compilation)
-    - [Results](#results)
-    - [Testing](#testing)
-        - [Simulation tests](#simulation-tests)
-        - [Renderer tests](#renderer-tests)
-        - [I/O tests](#io-tests)
-    - [Use of AI](#use-of-ai)
-    - [Author](#author)
+- [Introduction](#introduction)
+- [Descriptions](#description)
+- [Implementation](#implementation)
+    - [Project Structure](#project-structure)
+    - [Design choices](#design-choices)
+        - [Simulation implementation](#simulation-implementation)
+        - [Renderer implementation](#renderer-implementation)
+        - [I/O implementation](#io-implementation)
+        - [Main implementation](#main-implementation)
+- [Input–Output](#inputoutput)
+- [Compilation](#compilation)
+- [Results](#results)
+- [Testing](#testing)
+    - [Simulation tests](#simulation-tests)
+    - [Renderer tests](#renderer-tests)
+    - [I/O tests](#io-tests)
+- [Use of AI](#use-of-ai)
+- [Author](#author)
 
 ---
 
