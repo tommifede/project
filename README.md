@@ -306,7 +306,11 @@ Input and output functions are also tested to verify correct construction of sim
 ---
 
 ## Use of AI
-[...]
+Artificial intelligence tools were used as auxiliary support during the development of the project.    
+    
+AI assistance was employed to help resolve specific implementation issues in the graphical rendering subsystem (e.g. view handling and coordinate scaling) and to obtain minor guidance on `CMakeLists.txt` modifications aimed at avoiding compilation errors. AI was also used for support with technical English, as well as for occasional help with Markdown syntax used in this README file.    
+    
+All design choices and final implementations were independently validated by the author.
 
 ---
 
