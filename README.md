@@ -195,7 +195,7 @@ An example of valid interactive input is summarized below:
 | $T$          | 10    |
 
 </div>
-
+<br>
 If all user inputs are valid, the program provides two possible types of output, which are independent and optional:
 - a window showing the evolution of the system in the $x - y$ plane, which can be displayed either step by step or as the complete trajectory;
 - a CSV file containing the numerical data of the simulation, including populations and the value of the first integral at each time, exportable via a dedicated method.
