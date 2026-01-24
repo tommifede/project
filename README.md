@@ -97,26 +97,26 @@ Hereinafter, the main project decisions are described and motivated.
 
 ### Project Structure
 The project is organized in a hierarchical, tree-like directory structure.  
-The root directory contains configuration and utility files, while the source code is divided into 4 dedicated subdirectories as described below:
+The root directory contains configuration and utility files, while the source code is divided into 4 dedicated subdirectories:
 
-- **include/**: header files
+- **include/**: header files (class and function declarations)
     - _input.hpp_
     - _output.hpp_
     - _renderer.hpp_
     - _simulation.hpp_
-- **io/**: input/output implementation files
+- **io/**: input/output implementation files (handling user interaction and data writing)
     - _input.cpp_
     - _output.cpp_
-- **src/**: source files
+- **src/**: main source files, including numerical simulation and rendering logic
     - _main.cpp_
     - _renderer.cpp_
     - _simulation.cpp_
-- **test/**: unit tests
+- **test/**: unit test files (Doctest-based)
     - _renderer_test.cpp_
     - _simulation_test.cpp_
-- _CMakeLists.txt_: build configuration
-- _doctest.h_: testing framework
-- _font.ttf_: font file
+- _CMakeLists.txt_: build configuration file (for CMake and Ninja)
+- _doctest.h_: testing framework header
+- _font.ttf_: font resource file (used by renderer)
 - _README.md_: this file
 
 ### Design Choices
@@ -130,7 +130,7 @@ This prevents the simulation and the renderer from operating on invalid or incon
 
 #### Simulation implementation
 The simulation of the Lotka–Volterra system is implemented through a `Simulation` class.    
-The state of the system at each time step is represented by a `State` struct, containing the populations $x$, $y$ and the value of the first integral $H$.    
+The state of the system at each time is represented by a `State` struct, containing the populations $x$, $y$ and the value of the first integral $H$.    
 The `Simulation` class stores the time step `dt_`, the relative variables `x_rel_` and `y_rel_`, a vector of states `states_` and a vector of model parameters `pars_`.    
     
 Private methods are used to check parameter validity, perform a single integration step and compute the energy. The public interface allows access to the simulation data and provides methods to evolve the system by one step, by a fixed number of steps or over a given time interval.
@@ -139,11 +139,12 @@ Private methods are used to check parameter validity, perform a single integrati
 The `Renderer` class handles the graphical representation of the Lotka–Volterra simulation using SFML.    
 It separates private members, which store internal state such as window size, axis scales, maximum world extents, trajectory points, last drawn step, text labels and others, from public methods that provide the drawing interface and configuration.    
     
-Private methods compute tick steps, world scaling and manage incremental trajectory updates via `last_drawn_step_` and `sf::VertexArray`, ensuring that only newly evolved points are processed at each step to optimize performance.    
+Private methods compute tick steps, world scaling and manage incremental trajectory updates via `last_drawn_step_` and `sf::VertexArray`.    
+This ensures that only newly evolved points are processed at each step to optimize performance.
     
 The public interface includes the constructor, a getter for window size, a `setDraw` method to configure views and scaling based on current simulation state and two overloaded `draw` methods: one to render up to a specific step, useful for animated evolution, and one to draw the full trajectory at once.
     
-Rendering uses two separate views: `ui_view` for fixed interface elements such as axes, labels, and titles and `world_view` for the dynamic simulation space, allowing independent scaling and panning without affecting the user interface.    
+Rendering uses two separate views: `ui_view` for fixed interface elements such as axes, labels, and titles and `world_view` for the dynamic simulation space, allowing independent scaling and translation without affecting the user interface.    
     
 Trajectory points are colored according to deviations from the initial energy, providing a direct visual cue of the system's energetic changes, while equilibrium points are highlighted in distinct colors.    
     
@@ -263,7 +264,7 @@ $$
 \end{align*}
 $$
 
-An example of the rendered trajectory is shown below:
+An example of the rendered trajectory (from the previous valid input) is shown below:
 
 <div align="center">
   <img src="trajectory.png" width="80%">
@@ -271,7 +272,7 @@ An example of the rendered trajectory is shown below:
 <br>
 The numerical output can be exported to a CSV file containing the full simulation history, with one row per time step and columns for time, prey and predator populations and the value of the first integral.    
     
-Degenerate initial conditions are handled consistently: if $x_0 = 0$ or $y_0 = 0$, the trajectory lies on the corresponding axis, while if $x_0 = y_0 = 0$ the system remains at the origin. In all cases, no populations are generated from zero.
+Degenerate initial conditions are handled consistently: if $x_0 = 0$ or $y_0 = 0$, the trajectory remains on the corresponding axis, while if $x_0 = y_0 = 0$ the system remains at the origin. In all cases, no populations emerge from zero.
 
 ---
 
