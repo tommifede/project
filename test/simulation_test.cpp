@@ -204,20 +204,20 @@ TEST_CASE("CSV output works correctly")
 {
   lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1.);
   sim.evolveTime(1.);
-  io::output_csv(sim, "trajectory.csv");
+  io::outputCSV(sim, "trajectory.csv");
 }
 
 TEST_CASE("Simulation input creates a proper simulation")
 {
-  CHECK_NOTHROW(io::input_simulation({0.001, 1., 1., 1., 1., 1., 1.}));
+  CHECK_NOTHROW(io::inputSimulation({0.001, 1., 1., 1., 1., 1., 1.}));
 
   lotka_volterra::Simulation sim =
-      io::input_simulation({0.001, 1., 1., 1., 1., 1., 1.});
+      io::inputSimulation({0.001, 1., 1., 1., 1., 1., 1.});
   CHECK(sim.dt() == 0.001);
 
-  CHECK_THROWS(io::input_simulation({0.1, 1., 1., 1., 1., 1., 1.}));
-  CHECK_THROWS(io::input_simulation({0.01, 0., 1., 1., 1., 1., 1.}));
-  CHECK_THROWS(io::input_simulation({0.01, 1., -1., 1., 1., 1., 1.}));
-  CHECK_THROWS(io::input_simulation({0.1, 1., 1., 1., 1., -1., 1.}));
-  CHECK_THROWS(io::input_simulation({0.1, 1., 1., 1., 1., 1., -1.}));
+  CHECK_THROWS(io::inputSimulation({0.1, 1., 1., 1., 1., 1., 1.}));
+  CHECK_THROWS(io::inputSimulation({0.01, 0., 1., 1., 1., 1., 1.}));
+  CHECK_THROWS(io::inputSimulation({0.01, 1., -1., 1., 1., 1., 1.}));
+  CHECK_THROWS(io::inputSimulation({0.1, 1., 1., 1., 1., -1., 1.}));
+  CHECK_THROWS(io::inputSimulation({0.1, 1., 1., 1., 1., 1., -1.}));
 }

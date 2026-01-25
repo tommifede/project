@@ -4,7 +4,7 @@
 #include "renderer.hpp"
 
 namespace io { 
-struct SimulationParams
+struct SimulationParameters
 {
   double dt;
   double A;
@@ -15,22 +15,18 @@ struct SimulationParams
   double y0;
 };
 
-struct RendererParam
-{
-  std::size_t size;
-};
-
-double read_double(std::string const& var, std::string const& prompt,
+std::string trim(std::string& s);
+double readDouble(std::string const& var, std::string const& prompt,
                    double min, double max, bool strict = true);
-std::size_t read_size(std::string const& var, std::string const& prompt,
+std::size_t readSize(std::string const& var, std::string const& prompt,
                       std::size_t min, std::size_t max);
-SimulationParams ask_simulation_params();
-RendererParam ask_renderer_param();
-lotka_volterra::Simulation input_simulation(SimulationParams sim_p);
-lotka_volterra::Simulation input_simulation();
-lotka_volterra::Renderer input_renderer(RendererParam ren_p);
-lotka_volterra::Renderer input_renderer();
-double input_T(lotka_volterra::Simulation const& sim);
+SimulationParameters askSimulationParameters();
+std::size_t askRendererParameter();
+lotka_volterra::Simulation inputSimulation(SimulationParameters sim_p);
+lotka_volterra::Simulation inputSimulation();
+lotka_volterra::Renderer inputRenderer(std::size_t size);
+lotka_volterra::Renderer inputRenderer();
+double inputTime(lotka_volterra::Simulation const& sim);
 } // namespace io
 
 #endif

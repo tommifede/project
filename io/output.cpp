@@ -2,7 +2,7 @@
 #include <fstream>
 
 namespace io {
-void output_csv(lotka_volterra::Simulation const& simulation,
+void outputCSV(lotka_volterra::Simulation const& simulation,
                 std::string const& filename)
 {
   std::ofstream file(filename);

@@ -5,12 +5,12 @@
 int main()
 {
   try {
-    lotka_volterra::Simulation sim = io::input_simulation();
+    lotka_volterra::Simulation sim = io::inputSimulation();
     // lotka_volterra::Simulation sim =
-    //     io::input_simulation({0.01, 5., 1., 1., 4., 3.8, 5.3});
-    lotka_volterra::Renderer ren = io::input_renderer();
-    // lotka_volterra::Renderer ren = io::input_renderer({800, 800});
-    double T = io::input_T(sim);
+    // io::inputSimulation({0.001, 10., 6., 4., 12., 4., 3.});
+    lotka_volterra::Renderer ren = io::inputRenderer();
+    // lotka_volterra::Renderer ren = io::inputRenderer(1000);
+    double T = io::inputTime(sim);
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
@@ -39,7 +39,7 @@ int main()
         win.display();
       }
     }
-    io::output_csv(sim, "trajectory.csv");
+    io::outputCSV(sim, "trajectory.csv");
 
     return 0;
   } catch (std::exception const& e) {

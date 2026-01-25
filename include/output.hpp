@@ -2,10 +2,10 @@
 #define OUTPUT_HPP
 
 #include "simulation.hpp"
-#include <string> 
+#include <string>
 
 namespace io {
-void output_csv(lotka_volterra::Simulation const& simulation,
+void outputCSV(lotka_volterra::Simulation const& simulation,
                 std::string const& filename);
 } // namespace io
 

@@ -1,6 +1,4 @@
 #include "../include/renderer.hpp"
-#include <SFML/Graphics.hpp>
-#include <algorithm>
 #include <cmath>
 #include <format>
 
