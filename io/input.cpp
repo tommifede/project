@@ -6,40 +6,47 @@
 namespace io {
 std::string trim(std::string& s)
 {
-  auto not_space = [](unsigned char c) { return !std::isspace(c); };
+  auto not_space = [](unsigned char c) {
+    return !std::isspace(c);
+  }; // lambda expression to identify a non-space character
 
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), not_space));
-  s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(), s.end());
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+                                  not_space)); // erase first white spaces
+  s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(),
+          s.end()); // erase last wiht spaces
 
   return s;
 }
 
-double readDouble(std::string const& var, std::string const& prompt,
-                   double min, double max, bool strict)
+double readDouble(std::string const& var, std::string const& prompt, double min,
+                  double max, bool strict)
 {
   while (true) {
-    std::cout << prompt;
+    std::cout << prompt; // ask info
     std::string input;
-    std::getline(std::cin, input);
+    std::getline(std::cin, input); // get info to put in input
     trim(input);
 
     if (input.empty()) {
       throw std::invalid_argument(var + " input is empty.");
     }
 
-    double val;
-    auto [ptr, ec] =
-        std::from_chars(input.data(), input.data() + input.size(), val);
+    double val; // type: double
+    auto [ptr, ec] = std::from_chars(
+        input.data(), input.data() + input.size(),
+        val); // if totally non-numeric input, ec = std::errc::invalid_argument
 
     if (ec != std::errc{}) {
       throw std::invalid_argument("non-numeric input for " + var + ".");
     }
 
-    size_t idx;
+    size_t idx; // length of the double value
     double value = std::stod(input, &idx);
 
     if (idx != input.size()) {
-      throw std::invalid_argument("non-numeric input for " + var + ".");
+      throw std::invalid_argument(
+          "non-numeric input for " + var
+          + "."); // if partially non-numeric input, idx != input.size()
     }
 
     if ((strict && value <= min) || (!strict && value < min)) {
@@ -56,7 +63,7 @@ double readDouble(std::string const& var, std::string const& prompt,
 
 
 std::size_t readSize(std::string const& var, std::string const& prompt,
-                      std::size_t min, std::size_t max)
+                     std::size_t min, std::size_t max)
 {
   while (true) {
     std::cout << prompt;
@@ -76,7 +83,7 @@ std::size_t readSize(std::string const& var, std::string const& prompt,
     }
 
     std::size_t idx;
-    long long value = std::stoll(input, &idx);
+    auto value = std::stoll(input, &idx);
 
     if (idx != input.size()) {
       throw std::invalid_argument(var + " input must be an integer.");
@@ -86,12 +93,13 @@ std::size_t readSize(std::string const& var, std::string const& prompt,
       throw std::invalid_argument(var + " input must be positive.");
     }
 
-    if (static_cast<std::size_t>(value) < min
-        || static_cast<std::size_t>(value) > max) {
+    std::size_t size_value = static_cast<std::size_t>(value);
+
+    if (size_value < min || size_value > max) {
       throw std::out_of_range(var + " input out of range.");
     }
 
-    return static_cast<std::size_t>(value);
+    return size_value;
   }
 }
 
@@ -101,17 +109,17 @@ SimulationParameters askSimulationParameters()
   std::cout << "Insert simulation parameters values\n";
 
   sim_p.dt = readDouble("dt", "dt (double, 0.0001 <= dt <= 0.01): ", 0.0001,
-                         0.01, false);
+                        0.01, false);
   sim_p.A  = readDouble("A", "A (double, >0): ", 0., 1e6);
   sim_p.B  = readDouble("B", "B (double, >0): ", 0., 1e6);
   sim_p.C  = readDouble("C", "C (double, >0): ", 0., 1e6);
   sim_p.D  = readDouble("D", "D (double, >0): ", 0., 1e6);
   sim_p.x0 =
       readDouble("prey population density",
-                  "prey population density (double, >=0): ", 0., 1e6, false);
-  sim_p.y0 = readDouble("predator population density",
-                         "predator population density (double, >=0): ", 0., 1e6,
-                         false);
+                 "prey population density (double, >=0): ", 0., 1e6, false);
+  sim_p.y0 =
+      readDouble("predator population density",
+                 "predator population density (double, >=0): ", 0., 1e6, false);
 
   return sim_p;
 }
@@ -160,7 +168,7 @@ double inputTime(lotka_volterra::Simulation const& sim)
 {
   std::cout << "Insert time of simulation, multiple of " << sim.dt() << "\n";
 
-  double T = readDouble("T", "T (double, >0): ", 0, 1e8);
+  double T = readDouble("T", "T (double, >0): ", 0, 1e6);
   double n = T / sim.dt();
 
   if (std::abs(n - std::round(n)) > 1e-8) {

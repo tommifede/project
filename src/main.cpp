@@ -39,6 +39,7 @@ int main()
         win.display();
       }
     }
+    
     io::outputCSV(sim, "trajectory.csv");
 
     return 0;
