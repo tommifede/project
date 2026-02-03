@@ -39,8 +39,7 @@ add_library(core STATIC
     io/output.cpp
 )
 target_include_directories(core PUBLIC
-    include
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 target_link_libraries(core PUBLIC sfml-graphics)
 
@@ -55,11 +54,17 @@ if (BUILD_TESTING)
 
   # simulation test executable named "simulation_test"
   add_executable(simulation_test test/simulation_test.cpp)
+  target_include_directories(simulation_test PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}
+  )
   target_link_libraries(simulation_test PRIVATE core)
   add_test(NAME simulation_test COMMAND simulation_test)
 
   # renderer test executable named "renderer_test"
   add_executable(renderer_test test/renderer_test.cpp)
+  target_include_directories(renderer_test PRIVATE
+      ${CMAKE_CURRENT_SOURCE_DIR}
+  )
   target_link_libraries(renderer_test PRIVATE core)
   add_test(NAME renderer_test COMMAND renderer_test)
 

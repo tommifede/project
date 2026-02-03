@@ -1,4 +1,4 @@
-#include "../include/simulation.hpp"
+#include "simulation.hpp"
 #include <algorithm>
 #include <cmath>
 #include <fstream>

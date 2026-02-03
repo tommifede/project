@@ -1,4 +1,4 @@
-#include "../include/output.hpp"
+#include "output.hpp"
 #include <fstream>
 
 namespace io {

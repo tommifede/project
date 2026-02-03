@@ -1,8 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest.h>
+#include "doctest.h"
 
-#include "../include/input.hpp"
-#include "../include/output.hpp"
+#include "input.hpp"
+#include "output.hpp"
 
 TEST_CASE("Simulation constructor works and initialize correctly")
 {

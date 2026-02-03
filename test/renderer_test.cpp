@@ -1,7 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include <doctest.h>
+#include "doctest.h"
 
-#include "../include/input.hpp"
+#include "input.hpp"
 
 TEST_CASE("Renderer constructor rejects width and height out of range")
 {

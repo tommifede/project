@@ -1,5 +1,5 @@
-#include "../include/input.hpp"
-#include "../include/output.hpp"
+#include "input.hpp"
+#include "output.hpp"
 #include <iostream>
 
 int main()
