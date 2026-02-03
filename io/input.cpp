@@ -129,7 +129,7 @@ std::size_t askRendererParameter()
   std::size_t size;
   std::cout << "Insert renderer parameter value\n";
 
-  size = readSize("size", "size (integer, between 800 and 1000): ", 800, 1000);
+  size = readSize("size", "size (integer, 800 < size < 1000): ", 800, 1000);
 
   return size;
 }
@@ -172,7 +172,7 @@ double inputTime(lotka_volterra::Simulation const& sim)
   double n = T / sim.dt();
 
   if (std::abs(n - std::round(n)) > 1e-8) {
-    throw std::invalid_argument("T must be multiple of dt.");
+    throw std::invalid_argument("T input must be multiple of dt.");
   }
 
   return T;

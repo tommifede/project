@@ -5,10 +5,10 @@
 namespace lotka_volterra {
 void Renderer::check_parameter(std::size_t size)
 {
-  if (size
-      != std::clamp(size, static_cast<std::size_t>(800),
-                    static_cast<std::size_t>(1000))) {
-    throw std::invalid_argument("size must be between 800 and 1000.");
+  std::size_t min_size = 800;
+  std::size_t max_size = 1000;
+  if (size != std::clamp(size, min_size, max_size)) {
+    throw std::invalid_argument("parameter size must be between 800 and 1000.");
   }
 }
 

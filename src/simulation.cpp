@@ -8,16 +8,16 @@ void Simulation::check_parameters(double dt, double A, double B, double C,
                                   double D, double x0, double y0) const
 {
   if (dt <= 0.) {
-    throw std::invalid_argument("dt must be > 0.");
+    throw std::invalid_argument("parameter dt must be > 0.");
   }
   if (dt != std::clamp(dt, 0.0001, 0.01)) {
-    throw std::invalid_argument("dt must be between 0.0001 and 0.01.");
+    throw std::invalid_argument("parameter dt must be between 0.0001 and 0.01.");
   }
   if (A <= 0. || B <= 0. || C <= 0. || D <= 0.) {
-    throw std::invalid_argument("A, B, C, D must be > 0.");
+    throw std::invalid_argument("parameters A, B, C, D must be > 0.");
   }
   if (x0 < 0. || y0 < 0.) {
-    throw std::invalid_argument("x0, y0 must be >= 0.");
+    throw std::invalid_argument("parameters x0, y0 must be >= 0.");
   }
 }
 
@@ -105,12 +105,12 @@ void Simulation::evolveSteps(std::size_t add_steps)
 void Simulation::evolveTime(double T)
 {
   if (T < 0) {
-    throw std::invalid_argument("T must be positive.");
+    throw std::invalid_argument("parameter T must be positive.");
   }
 
   double n = T / dt_;
   if (std::abs(n - std::round(n)) > 1e-8) {
-    throw std::invalid_argument("T must be multiple of dt.");
+    throw std::invalid_argument("parameter T must be multiple of dt.");
   }
 
   std::size_t steps = static_cast<std::size_t>(std::round(n));
