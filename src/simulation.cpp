@@ -7,11 +7,9 @@ namespace lotka_volterra {
 void Simulation::check_parameters(double dt, double A, double B, double C,
                                   double D, double x0, double y0) const
 {
-  if (dt <= 0.) {
-    throw std::invalid_argument("parameter dt must be > 0.");
-  }
   if (dt != std::clamp(dt, 0.0001, 0.01)) {
-    throw std::invalid_argument("parameter dt must be between 0.0001 and 0.01.");
+    throw std::invalid_argument(
+        "parameter dt must be between 0.0001 and 0.01.");
   }
   if (A <= 0. || B <= 0. || C <= 0. || D <= 0.) {
     throw std::invalid_argument("parameters A, B, C, D must be > 0.");
@@ -23,8 +21,8 @@ void Simulation::check_parameters(double dt, double A, double B, double C,
 
 void Simulation::integrate()
 {
-  double A = getParameter(0);
-  double D = getParameter(3);
+  double A            = getParameter(0);
+  double D            = getParameter(3);
   const double x_prev = x_rel_;
   const double y_prev = y_rel_;
   const double x_new  = x_prev + A * (1 - y_prev) * x_prev * dt_;

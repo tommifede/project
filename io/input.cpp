@@ -13,7 +13,8 @@ std::string trim(std::string& s)
   s.erase(s.begin(), std::find_if(s.begin(), s.end(),
                                   not_space)); // erase first white spaces
   s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(),
-          s.end()); // erase last wiht spaces
+          s.end()); // erase last white spaces; base convert reverse iterator to
+                    // (next) iterator
 
   return s;
 }
@@ -21,86 +22,83 @@ std::string trim(std::string& s)
 double readDouble(std::string const& var, std::string const& prompt, double min,
                   double max, bool strict)
 {
-  while (true) {
-    std::cout << prompt; // ask info
-    std::string input;
-    std::getline(std::cin, input); // get info to put in input
-    trim(input);
+  std::cout << prompt; // ask info
+  std::string input;
+  std::getline(std::cin, input); // get info to put in input
+  trim(input);
 
-    if (input.empty()) {
-      throw std::invalid_argument(var + " input is empty.");
-    }
-
-    double val; // type: double
-    auto [ptr, ec] = std::from_chars(
-        input.data(), input.data() + input.size(),
-        val); // if totally non-numeric input, ec = std::errc::invalid_argument
-
-    if (ec != std::errc{}) {
-      throw std::invalid_argument("non-numeric input for " + var + ".");
-    }
-
-    size_t idx; // length of the double value
-    double value = std::stod(input, &idx);
-
-    if (idx != input.size()) {
-      throw std::invalid_argument(
-          "non-numeric input for " + var
-          + "."); // if partially non-numeric input, idx != input.size()
-    }
-
-    if ((strict && value <= min) || (!strict && value < min)) {
-      throw std::out_of_range(var + " input out of range.");
-    }
-
-    if ((strict && value >= max) || (!strict && value > max)) {
-      throw std::out_of_range(var + " input out of range.");
-    }
-
-    return value;
+  if (input.empty()) {
+    throw std::invalid_argument(var + " input is empty.");
   }
+
+  double val; // type: double
+  auto [ptr, ec] = std::from_chars(
+      input.data(), input.data() + input.size(),
+      val); // if totally non-numeric input, ec = std::errc::invalid_argument
+
+  if (ec != std::errc{}) {
+    throw std::invalid_argument("non-numeric input for " + var + ".");
+  }
+
+  size_t idx; // length of the double value
+  double value = std::stod(input, &idx);
+
+  if (idx != input.size()) {
+    throw std::invalid_argument(
+        "non-numeric input for " + var
+        + "."); // if partially non-numeric input, idx != input.size()
+  }
+
+  if ((strict && value <= min) || (!strict && value < min)) {
+    throw std::out_of_range(var + " input out of range.");
+  }
+
+  if ((strict && value >= max) || (!strict && value > max)) {
+    throw std::out_of_range(var + " input out of range.");
+  }
+
+  return value;
 }
 
 
 std::size_t readSize(std::string const& var, std::string const& prompt,
                      std::size_t min, std::size_t max)
 {
-  while (true) {
-    std::cout << prompt;
-    std::string input;
-    std::getline(std::cin, input);
+  std::cout << prompt;
+  std::string input;
+  std::getline(std::cin, input);
+  trim(input);
 
-    if (input.empty()) {
-      throw std::invalid_argument(var + " input is empty.");
-    }
-
-    std::size_t val;
-    auto [ptr, ec] =
-        std::from_chars(input.data(), input.data() + input.size(), val);
-
-    if (ec != std::errc{}) {
-      throw std::invalid_argument("non-numeric input for " + var + ".");
-    }
-
-    std::size_t idx;
-    auto value = std::stoll(input, &idx);
-
-    if (idx != input.size()) {
-      throw std::invalid_argument(var + " input must be an integer.");
-    }
-
-    if (value < 0) {
-      throw std::invalid_argument(var + " input must be positive.");
-    }
-
-    std::size_t size_value = static_cast<std::size_t>(value);
-
-    if (size_value < min || size_value > max) {
-      throw std::out_of_range(var + " input out of range.");
-    }
-
-    return size_value;
+  if (input.empty()) {
+    throw std::invalid_argument(var + " input is empty.");
   }
+
+  std::size_t val;
+  auto [ptr, ec] =
+      std::from_chars(input.data(), input.data() + input.size(), val);
+
+  if (ec != std::errc{}) {
+    throw std::invalid_argument("non-numeric input for " + var + ".");
+  }
+
+  std::size_t idx;
+  auto value = std::stoll(input, &idx);
+
+  if (idx != input.size()) {
+    throw std::invalid_argument(var + " input must be an integer.");
+  }
+
+  if (value < 0) {
+    throw std::invalid_argument(var + " input must be positive.");
+  }
+
+  std::size_t size_value = static_cast<std::size_t>(value);
+
+  if (size_value < min || size_value > max) {
+    throw std::out_of_range(var + " input out of range.");
+  }
+
+  return size_value;
 }
 
 SimulationParameters askSimulationParameters()
@@ -124,7 +122,7 @@ SimulationParameters askSimulationParameters()
   return sim_p;
 }
 
-std::size_t askRendererParameter()
+std::size_t askSize()
 {
   std::size_t size;
   std::cout << "Insert renderer parameter value\n";
@@ -159,7 +157,7 @@ lotka_volterra::Renderer inputRenderer(std::size_t size)
 
 lotka_volterra::Renderer inputRenderer()
 {
-  lotka_volterra::Renderer renderer = inputRenderer(askRendererParameter());
+  lotka_volterra::Renderer renderer = inputRenderer(askSize());
 
   return renderer;
 }
@@ -173,7 +171,7 @@ double inputTime(lotka_volterra::Simulation const& sim)
 
   if (std::abs(n - std::round(n)) > 1e-8) {
     throw std::invalid_argument("T input must be multiple of dt.");
-  }
+  } // for floating-point rounding errors
 
   return T;
 }
