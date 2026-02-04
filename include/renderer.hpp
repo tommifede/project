@@ -4,7 +4,7 @@
 #include "simulation.hpp"
 #include <SFML/Graphics.hpp>
 
-namespace lotka_volterra { 
+namespace lotka_volterra {
 class Renderer
 {
 private:
@@ -39,7 +39,7 @@ private:
 
 public:
   Renderer(std::size_t size);
-  std::size_t getSize() const;
+  std::size_t size() const;
   void setDraw(sf::RenderWindow& window, Simulation const& simulation,
                std::size_t current_step, sf::View const& ui_view,
                sf::View& world_view, double margin = 1.2,

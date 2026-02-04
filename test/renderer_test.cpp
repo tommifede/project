@@ -48,7 +48,7 @@ TEST_CASE("Renderer draws equilibrium point and draws axes without crashing")
 TEST_CASE("Renderer input creates a proper renderer")
 {
   lotka_volterra::Renderer r = io::inputRenderer({800});
-  CHECK(r.getSize() == 800);
+  CHECK(r.size() == 800);
 
   CHECK_THROWS(io::inputRenderer({700}));
 }

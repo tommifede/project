@@ -15,10 +15,10 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
 
-    sf::RenderWindow win(
-        sf::VideoMode(static_cast<unsigned int>(ren.getSize()),
-                      static_cast<unsigned int>(ren.getSize())),
-        "Lotka-Volterra", sf::Style::Titlebar | sf::Style::Close, settings);
+    sf::RenderWindow win(sf::VideoMode(static_cast<unsigned int>(ren.size()),
+                                       static_cast<unsigned int>(ren.size())),
+                         "Lotka-Volterra",
+                         sf::Style::Titlebar | sf::Style::Close, settings);
     std::size_t step = 0;
 
     while (win.isOpen()) {
@@ -39,7 +39,7 @@ int main()
         win.display();
       }
     }
-    
+
     io::outputCSV(sim, "trajectory.csv");
 
     return 0;

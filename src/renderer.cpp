@@ -106,7 +106,7 @@ Renderer::Renderer(std::size_t size)
   }
 }
 
-std::size_t Renderer::getSize() const
+std::size_t Renderer::size() const
 {
   return size_;
 }
