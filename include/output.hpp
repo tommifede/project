@@ -5,8 +5,7 @@
 #include <string>
 
 namespace io {
-void outputCSV(lotka_volterra::Simulation const& simulation,
-                std::string const& filename);
+void outputCSV(lotka_volterra::Simulation const& simulation, std::string const& filename);
 } // namespace io
 
-#endif 
+#endif

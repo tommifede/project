@@ -6,8 +6,7 @@ int main()
 {
   try {
     lotka_volterra::Simulation sim = io::inputSimulation();
-    // lotka_volterra::Simulation sim =
-    // io::inputSimulation({0.001, 10., 6., 4., 12., 4., 3.});
+    // lotka_volterra::Simulation sim = io::inputSimulation({0.001, 10., 6., 4., 12., 4., 3.});
     lotka_volterra::Renderer ren = io::inputRenderer();
     // lotka_volterra::Renderer ren = io::inputRenderer(1000);
     double T = io::inputTime(sim);
@@ -16,10 +15,8 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8; // smooth trajectory
 
-    sf::RenderWindow win(sf::VideoMode(static_cast<unsigned int>(ren.size()),
-                                       static_cast<unsigned int>(ren.size())),
-                         "Lotka-Volterra Simulation",
-                         sf::Style::Titlebar | sf::Style::Close, settings);
+    sf::RenderWindow win(sf::VideoMode(static_cast<unsigned int>(ren.size()), static_cast<unsigned int>(ren.size())),
+                         "Lotka-Volterra Simulation", sf::Style::Titlebar | sf::Style::Close, settings);
 
     std::size_t step = 0;
     bool finished    = false;

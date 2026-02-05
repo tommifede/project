@@ -12,6 +12,13 @@ void Renderer::check_parameter(std::size_t size)
   }
 }
 
+void Renderer::check_set()
+{
+  if (set_ != true) {
+    throw std::logic_error("renderer draw not set.");
+  }
+}
+
 sf::Color Renderer::color_energy(double H, double H0) const
 {
   if (!std::isfinite(H)) {
@@ -19,14 +26,14 @@ sf::Color Renderer::color_energy(double H, double H0) const
   }
 
   double dH = std::abs(H - H0);
-  double t  = (H0 != 0) ? std::clamp(dH / std::abs(H0), 0., 1.) : 1.;
+  double t  = (H0 != 0) ? std::clamp(dH / std::abs(H0), 0., 1.) : 1.; // 0 <= t <= 1
 
   sf::Uint8 r;
   sf::Uint8 g;
-  if (t < 0.5) {
+  if (t < 0.5) { // green -> yellow
     r = static_cast<sf::Uint8>(t * 2 * 255);
     g = 255;
-  } else {
+  } else { // yellow -> red
     r = 255;
     g = static_cast<sf::Uint8>((1 - (t - 0.5) * 2) * 255);
   }
@@ -37,17 +44,18 @@ sf::Color Renderer::color_energy(double H, double H0) const
 double Renderer::compute_tick_step(double max_value)
 {
   if (max_value <= 0.) {
-    return 1.;
+    return 1.; // grafico banale
   }
 
   double raw_step = max_value / tick_count_;
   double order    = std::floor(std::log10(raw_step));
   double pow_step = std::pow(10., order);
-  double factor   = raw_step / pow_step;
+  double factor   = raw_step / pow_step; // to scale 1, 2, 5,...
 
   if (factor < 2.) {
     return 1. * pow_step;
   }
+
   if (factor < 5.) {
     return 2. * pow_step;
   }
@@ -57,44 +65,46 @@ double Renderer::compute_tick_step(double max_value)
 
 double Renderer::step_tick(double margin, double max_x, double max_y)
 {
-  double worldExtent = std::max(max_x, max_y) * margin;
+  double worldExtent = std::max(max_x, max_y) * margin; // theorical drawable size in units
 
   return compute_tick_step(worldExtent);
 }
 
 double Renderer::max_world(double margin, double max_x, double max_y)
 {
-  double worldExtent = std::max(max_x, max_y) * margin;
+  double worldExtent = std::max(max_x, max_y) * margin; // theorical drawable size in units
   double tick_step   = compute_tick_step(worldExtent);
-  double num_ticks   = std::ceil(worldExtent / tick_step);
+  double num_ticks   = std::ceil(worldExtent / tick_step); // to approximate at biggest digit
 
-  return num_ticks * tick_step;
+  return num_ticks * tick_step; // real drawable size in units (bigger)
 }
 
 double Renderer::scale(double world_max, float axis_offset, sf::View ui_view)
 {
-  float drawableWidth  = ui_view.getSize().x - 2 * axis_offset;
-  float drawableHeight = ui_view.getSize().y - 2 * axis_offset;
+  float drawableSize = ui_view.getSize().x - 2 * axis_offset; // real drawable size in pixels
 
-  return std::min(drawableWidth / static_cast<float>(world_max),
-                  drawableHeight / static_cast<float>(world_max));
+  return drawableSize / static_cast<float>(world_max); // scale factor: pixels/unit
 }
 
-void Renderer::update_trajectory(Simulation const& simulation,
-                                 std::size_t current_step)
+void Renderer::update_trajectory(Simulation const& simulation, std::size_t current_step)
 {
   double H0 = simulation.stateAt(0).H;
 
-  for (std::size_t i = last_drawn_step_; i < current_step; ++i) {
+  for (std::size_t i = last_drawn_step_; i < current_step; ++i) { // to optimize trajectory computation
     State const& state = simulation.stateAt(i);
-    trajectory_.append(
-        {{static_cast<float>(state.x), static_cast<float>(state.y)},
-         color_energy(state.H, H0)});
+    trajectory_.append({{static_cast<float>(state.x), static_cast<float>(state.y)}, color_energy(state.H, H0)});
   }
 
   last_drawn_step_ = current_step;
 }
 
+void Renderer::validate_window(sf::RenderWindow const& window) const
+{
+  auto size = window.getSize();
+  if (size.x != size.y) {
+    throw std::invalid_argument("renderer requires a square window.");
+  }
+}
 
 Renderer::Renderer(std::size_t size)
     : size_{size}
@@ -111,8 +121,7 @@ std::size_t Renderer::size() const
   return size_;
 }
 
-void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation,
-                       std::size_t current_step, sf::View const& ui_view,
+void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step, sf::View const& ui_view,
                        sf::View& world_view, double margin, float axis_offset)
 {
   x_eq_  = simulation.getParameter(3) / simulation.getParameter(2);
@@ -122,125 +131,117 @@ void Renderer::setDraw(sf::RenderWindow& window, Simulation const& simulation,
 
   for (std::size_t i = 0; i < current_step; ++i) {
     State const& state = simulation.stateAt(i);
-    max_x_             = std::max(max_x_, std::abs(state.x));
-    max_y_             = std::max(max_y_, std::abs(state.y));
-  }
+    max_x_             = std::max(max_x_, state.x);
+    max_y_             = std::max(max_y_, state.y);
+  } // compute max values
 
-  world_max_       = max_world(margin, max_x_, max_y_);
-  pixels_per_unit_ = scale(world_max_, axis_offset, ui_view);
-  y0_              = ui_view.getSize().y - axis_offset;
+  world_max_       = max_world(margin, max_x_, max_y_);       // real drawable size in units (bigger)
+  pixels_per_unit_ = scale(world_max_, axis_offset, ui_view); // scale factor: pixels/unit
+  y0_              = ui_view.getSize().y - axis_offset;       // y origin, starting point of x and y axes
   tick_step_       = step_tick(margin, max_x_, max_y_);
   axis_offset_     = axis_offset;
+  axis_length_     = static_cast<float>(world_max_ * pixels_per_unit_);
 
   label_.setFont(font_);
   label_.setCharacterSize(label_font_size_);
   label_.setFillColor(sf::Color::Black);
 
   float world_size = static_cast<float>(world_max_);
-  world_view.setSize(world_size, -world_size);
+  world_view.setSize(world_size, -world_size); // view in units
   world_view.setCenter(world_size / 2.f, world_size / 2.f);
 
   sf::Vector2u winSize = window.getSize();
-  float left           = axis_offset_ / static_cast<float>(winSize.x);
-  float bottom         = axis_offset_ / static_cast<float>(winSize.y);
+  float side           = axis_offset_ / static_cast<float>(winSize.x);
 
-  world_view.setViewport({left, bottom, 1.f - 2 * left, 1.f - 2 * bottom});
+  world_view.setViewport({side, side, 1.f - 2 * side, 1.f - 2 * side});
+  set_ = true;
 }
 
 
 void Renderer::drawAxes(sf::RenderWindow& window, sf::View const& ui_view)
 {
-  window.setView(ui_view);
+  check_set();
+  window.setView(ui_view); // in pixels
 
-  sf::Vertex x_axis[] = {
-      {{axis_offset_, y0_}, sf::Color::Black},
-      {{axis_offset_ + static_cast<float>(world_max_ * pixels_per_unit_), y0_},
-       sf::Color::Black}};
+  sf::Vertex x_axis[] = {{{axis_offset_, y0_}, sf::Color::Black},
+                         {{axis_offset_ + axis_length_, y0_}, sf::Color::Black}}; // 2 points with same y
 
-  sf::Vertex y_axis[] = {
-      {{axis_offset_, y0_}, sf::Color::Black},
-      {{axis_offset_,
-        std::max(y0_ - static_cast<float>(world_max_ * pixels_per_unit_),
-                 axis_offset_)},
-       sf::Color::Black}};
+  sf::Vertex y_axis[] = {{{axis_offset_, y0_}, sf::Color::Black},
+                         {{axis_offset_, axis_offset_}, sf::Color::Black}}; // 2 points with same x
 
-  window.draw(x_axis, 2, sf::Lines);
-  window.draw(y_axis, 2, sf::Lines);
+  window.draw(x_axis, 2, sf::Lines); // x_axis here is a pointer to its first vertex
+  window.draw(y_axis, 2, sf::Lines); // y_axis here is a pointer to its first vertex
 }
 
 void Renderer::drawTicks(sf::RenderWindow& window, sf::View const& ui_view)
 {
-  window.setView(ui_view);
+  check_set();
+  window.setView(ui_view); // in pixels
 
   sf::Color tick_color = sf::Color::Black;
-  sf::Color grid_color = sf::Color(200, 200, 200, 100);
+  sf::Color grid_color = sf::Color(200, 200, 200, 100); // light grey
 
-  int precision =
-      std::max(0, -static_cast<int>(std::floor(std::log10(tick_step_))));
-  std::string format = "{:." + std::to_string(precision) + "f}";
+  int precision      = std::max(0, -static_cast<int>(std::floor(std::log10(tick_step_)))); // decimal digit of precision
+  std::string format = "{:." + std::to_string(precision) + "f}";                           // e.g. "{:.2f}": round at 0.01
 
   for (double x = 0.; x <= world_max_; x += tick_step_) {
-    float px          = axis_offset_ + static_cast<float>(x * pixels_per_unit_);
-    sf::Vertex tick[] = {{{px, y0_ - 5.f}, tick_color},
-                         {{px, y0_ + 5.f}, tick_color}};
-    window.draw(tick, 2, sf::Lines);
+    float px = axis_offset_ + static_cast<float>(x * pixels_per_unit_); // x position of tick: from units to pixels
+    if (px > axis_offset_ + axis_length_) {
+      break;
+    } // control x ticks inside bounds
 
-    std::string label = std::vformat(format, std::make_format_args(x));
+    sf::Vertex tick[] = {{{px, y0_ - 5.f}, tick_color}, {{px, y0_ + 5.f}, tick_color}};
+    window.draw(tick, 2, sf::Lines); // tick here is a pointer to its first vertex
+
+    std::string label = std::vformat(format, std::make_format_args(x)); // double to string
     label_.setString(label);
     sf::FloatRect bounds = label_.getLocalBounds();
     label_.setPosition(px - bounds.width / 2.f, y0_ + 8.f);
     window.draw(label_);
 
-    sf::Vertex grid[] = {
-        {{px, y0_}, grid_color},
-        {{px, axis_offset_}},
-    };
-    window.draw(grid, 2, sf::Lines);
+    sf::Vertex grid[] = {{{px, y0_}, grid_color}, {{px, axis_offset_}, grid_color}}; // vertical line of grid
+    window.draw(grid, 2, sf::Lines);                                                 // grid here is a pointer to its first vertex
   }
 
   for (double y = 0.; y <= world_max_; y += tick_step_) {
-    float py = y0_ - static_cast<float>(y * pixels_per_unit_);
+    float py = y0_ - static_cast<float>(y * pixels_per_unit_); // y position of tick: from units to pixels
     if (py < axis_offset_) {
       break;
-    }
-    sf::Vertex tick[] = {{{axis_offset_ - 5.f, py}, tick_color},
-                         {{axis_offset_ + 5.f, py}, tick_color}};
+    } // control y ticks inside bounds
 
-    window.draw(tick, 2, sf::Lines);
+    sf::Vertex tick[] = {{{axis_offset_ - 5.f, py}, tick_color}, {{axis_offset_ + 5.f, py}, tick_color}};
+    window.draw(tick, 2, sf::Lines); // tick here is a pointer to its first vertex
 
-    std::string label = std::vformat(format, std::make_format_args(y));
+    std::string label = std::vformat(format, std::make_format_args(y)); // double to string
     label_.setString(label);
     sf::FloatRect bounds = label_.getLocalBounds();
     label_.setPosition(axis_offset_ - bounds.width - 10.f, py - bounds.height);
 
     window.draw(label_);
 
-    sf::Vertex grid[] = {
-        {{axis_offset_, py}, grid_color},
-        {{axis_offset_ + static_cast<float>(world_max_ * pixels_per_unit_), py},
-         grid_color}};
+    sf::Vertex grid[] = {{{axis_offset_, py}, grid_color},
+                         {{axis_offset_ + axis_length_, py}, grid_color}}; // horizontal line of grid
 
-    window.draw(grid, 2, sf::Lines);
+    window.draw(grid, 2, sf::Lines); // grid here is a pointer to its first vertex
   }
 }
 
-void Renderer::drawTrajectory(sf::RenderWindow& window,
-                              Simulation const& simulation,
-                              std::size_t current_step,
+void Renderer::drawTrajectory(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step,
                               sf::View const& world_view)
 {
-  window.setView(world_view);
+  check_set();
+  window.setView(world_view); // in units
   update_trajectory(simulation, current_step);
 
   window.draw(trajectory_);
 }
 
-void Renderer::drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view,
-                            sf::View const& world_view)
+void Renderer::drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view, sf::View const& world_view)
 {
-  window.setView(world_view);
+  check_set();
+  window.setView(world_view); // in units
 
-  float radius_world = eq_point_radius_ / static_cast<float>(pixels_per_unit_);
+  float radius_world = eq_point_radius_ / static_cast<float>(pixels_per_unit_); // radius of eq_point: from pixels to units
   sf::CircleShape eq_point(radius_world);
   eq_point.setFillColor(sf::Color::Blue);
   eq_point.setOrigin(radius_world, radius_world);
@@ -248,19 +249,20 @@ void Renderer::drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view,
 
   window.draw(eq_point);
 
-  window.setView(ui_view);
+  window.setView(ui_view); // in pixels
 
-  sf::CircleShape origin_eq_point(eq_point_radius_);
+  sf::CircleShape origin_eq_point(eq_point_radius_); // radius of eq_point in pixels
   origin_eq_point.setFillColor(sf::Color::Cyan);
   origin_eq_point.setOrigin(eq_point_radius_, eq_point_radius_);
-  origin_eq_point.setPosition({axis_offset_, y0_});
+  origin_eq_point.setPosition({axis_offset_, y0_}); // origin point in pixels
 
   window.draw(origin_eq_point);
 }
 
 void Renderer::drawTitles(sf::RenderWindow& window, sf::View const& ui_view)
 {
-  window.setView(ui_view);
+  check_set();
+  window.setView(ui_view); // in pixels
 
   sf::Text title;
   title.setFont(font_);
@@ -282,9 +284,7 @@ void Renderer::drawTitles(sf::RenderWindow& window, sf::View const& ui_view)
 
   sf::FloatRect x_bounds = x_title.getLocalBounds();
   x_title.setOrigin(x_bounds.width / 2.f, x_bounds.height / 2.f);
-  x_title.setPosition(
-      axis_offset_ + static_cast<float>(world_max_ * pixels_per_unit_) / 2.f,
-      ui_view.getSize().y - axis_offset_ / 2.f);
+  x_title.setPosition(axis_offset_ + axis_length_ / 2.f, ui_view.getSize().y - axis_offset_ / 2.f);
 
   window.draw(x_title);
 
@@ -297,17 +297,15 @@ void Renderer::drawTitles(sf::RenderWindow& window, sf::View const& ui_view)
 
   sf::FloatRect y_bounds = y_title.getLocalBounds();
   y_title.setOrigin(y_bounds.width / 2.f, y_bounds.height / 2.f);
-  y_title.setRotation(-90.f);
-  y_title.setPosition(
-      axis_offset_ / 3.f,
-      y0_ - static_cast<float>(world_max_ * pixels_per_unit_) / 2.f);
+  y_title.setRotation(-90.f); // clockwise rotation (in ui_view)
+  y_title.setPosition(axis_offset_ / 3.f, y0_ - axis_length_ / 2.f);
 
   window.draw(y_title);
 }
 
-void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation,
-                    std::size_t current_step)
+void Renderer::draw(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step)
 {
+  validate_window(window);
   if (current_step == 0) {
     return;
   }

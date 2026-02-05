@@ -6,9 +6,7 @@
 namespace io {
 std::string trim(std::string& s)
 {
-  auto not_space = [](unsigned char c) {
-    return !std::isspace(c);
-  }; // lambda expression to identify a non-space character
+  auto not_space = [](unsigned char c) { return !std::isspace(c); }; // lambda expression to identify a non-space character
 
   s.erase(s.begin(), std::find_if(s.begin(), s.end(),
                                   not_space)); // erase first white spaces
@@ -19,8 +17,7 @@ std::string trim(std::string& s)
   return s;
 }
 
-double readDouble(std::string const& var, std::string const& prompt, double min,
-                  double max, bool strict)
+double readDouble(std::string const& var, std::string const& prompt, double min, double max, bool strict)
 {
   std::cout << prompt; // ask info
   std::string input;
@@ -32,9 +29,8 @@ double readDouble(std::string const& var, std::string const& prompt, double min,
   }
 
   double val; // type: double
-  auto [ptr, ec] = std::from_chars(
-      input.data(), input.data() + input.size(),
-      val); // if totally non-numeric input, ec = std::errc::invalid_argument
+  auto [ptr, ec] = std::from_chars(input.data(), input.data() + input.size(),
+                                   val); // if totally non-numeric input, ec = std::errc::invalid_argument
 
   if (ec != std::errc{}) {
     throw std::invalid_argument("non-numeric input for " + var + ".");
@@ -44,9 +40,7 @@ double readDouble(std::string const& var, std::string const& prompt, double min,
   double value = std::stod(input, &idx);
 
   if (idx != input.size()) {
-    throw std::invalid_argument(
-        "non-numeric input for " + var
-        + "."); // if partially non-numeric input, idx != input.size()
+    throw std::invalid_argument("non-numeric input for " + var + "."); // if partially non-numeric input, idx != input.size()
   }
 
   if ((strict && value <= min) || (!strict && value < min)) {
@@ -61,8 +55,7 @@ double readDouble(std::string const& var, std::string const& prompt, double min,
 }
 
 
-std::size_t readSize(std::string const& var, std::string const& prompt,
-                     std::size_t min, std::size_t max)
+std::size_t readSize(std::string const& var, std::string const& prompt, std::size_t min, std::size_t max)
 {
   std::cout << prompt;
   std::string input;
@@ -74,8 +67,7 @@ std::size_t readSize(std::string const& var, std::string const& prompt,
   }
 
   std::size_t val;
-  auto [ptr, ec] =
-      std::from_chars(input.data(), input.data() + input.size(), val);
+  auto [ptr, ec] = std::from_chars(input.data(), input.data() + input.size(), val);
 
   if (ec != std::errc{}) {
     throw std::invalid_argument("non-numeric input for " + var + ".");
@@ -106,18 +98,13 @@ SimulationParameters askSimulationParameters()
   SimulationParameters sim_p;
   std::cout << "Insert simulation parameters values\n";
 
-  sim_p.dt = readDouble("dt", "dt (double, 0.0001 <= dt <= 0.01): ", 0.0001,
-                        0.01, false);
+  sim_p.dt = readDouble("dt", "dt (double, 0.0001 <= dt <= 0.01): ", 0.0001, 0.01, false);
   sim_p.A  = readDouble("A", "A (double, >0): ", 0., 1e6);
   sim_p.B  = readDouble("B", "B (double, >0): ", 0., 1e6);
   sim_p.C  = readDouble("C", "C (double, >0): ", 0., 1e6);
   sim_p.D  = readDouble("D", "D (double, >0): ", 0., 1e6);
-  sim_p.x0 =
-      readDouble("prey population density",
-                 "prey population density (double, >=0): ", 0., 1e6, false);
-  sim_p.y0 =
-      readDouble("predator population density",
-                 "predator population density (double, >=0): ", 0., 1e6, false);
+  sim_p.x0 = readDouble("prey population density", "prey population density (double, >=0): ", 0., 1e6, false);
+  sim_p.y0 = readDouble("predator population density", "predator population density (double, >=0): ", 0., 1e6, false);
 
   return sim_p;
 }
@@ -134,16 +121,14 @@ std::size_t askSize()
 
 lotka_volterra::Simulation inputSimulation(SimulationParameters sim_p)
 {
-  lotka_volterra::Simulation simulation(sim_p.dt, sim_p.A, sim_p.B, sim_p.C,
-                                        sim_p.D, sim_p.x0, sim_p.y0);
+  lotka_volterra::Simulation simulation(sim_p.dt, sim_p.A, sim_p.B, sim_p.C, sim_p.D, sim_p.x0, sim_p.y0);
 
   return simulation;
 }
 
 lotka_volterra::Simulation inputSimulation()
 {
-  lotka_volterra::Simulation simulation =
-      inputSimulation(askSimulationParameters());
+  lotka_volterra::Simulation simulation = inputSimulation(askSimulationParameters());
 
   return simulation;
 }

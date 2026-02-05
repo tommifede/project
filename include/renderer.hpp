@@ -18,41 +18,38 @@ private:
   double max_x_;
   double max_y_;
   float axis_offset_;
+  float axis_length_;
   sf::VertexArray trajectory_{sf::LineStrip};
-  std::size_t last_drawn_step_ = 0;
   sf::Text label_;
   sf::Font font_;
+  std::size_t last_drawn_step_  = 0;
   int tick_count_               = 10;
   unsigned int label_font_size_ = 12;
   float eq_point_radius_        = 5.f;
-  double world_margin_factor_   = 1.1;
-  bool world_initialized_       = false;
+  bool set_                     = false;
 
   void check_parameter(std::size_t size);
+  void check_set();
   sf::Color color_energy(double H, double H0) const;
   double compute_tick_step(double max_value);
   double step_tick(double margin, double max_x, double max_y);
   double max_world(double margin, double max_x, double max_y);
   double scale(double world_max, float axis_offset, sf::View ui_view);
-  void update_trajectory(Simulation const& simulation,
-                         std::size_t current_step);
+  void update_trajectory(Simulation const& simulation, std::size_t current_step);
+  void validate_window(sf::RenderWindow const& window) const;
 
 public:
   Renderer(std::size_t size);
   std::size_t size() const;
-  void setDraw(sf::RenderWindow& window, Simulation const& simulation,
-               std::size_t current_step, sf::View const& ui_view,
-               sf::View& world_view, double margin = 1.2,
-               float axis_offset = 100.f);
+  void setDraw(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step, sf::View const& ui_view,
+               sf::View& world_view, double margin = 1.2, float axis_offset = 100.f);
   void drawAxes(sf::RenderWindow& window, sf::View const& ui_view);
   void drawTicks(sf::RenderWindow& window, sf::View const& ui_view);
-  void drawTrajectory(sf::RenderWindow& window, Simulation const& simulation,
-                      std::size_t current_step, sf::View const& world_view);
-  void drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view,
-                    sf::View const& world_view);
+  void drawTrajectory(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step,
+                      sf::View const& world_view);
+  void drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view, sf::View const& world_view);
   void drawTitles(sf::RenderWindow& window, sf::View const& ui_view);
-  void draw(sf::RenderWindow& window, Simulation const& simulation,
-            std::size_t current_step);
+  void draw(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step);
   void draw(sf::RenderWindow& window, Simulation const& simulation);
 };
 } // namespace lotka_volterra

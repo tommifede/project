@@ -20,15 +20,13 @@ private:
   std::vector<double> pars_;
   std::vector<State> states_;
 
-  void check_parameters(double dt, double A, double B, double C, double D,
-                        double x0, double y0) const;
+  void check_parameters(double dt, double A, double B, double C, double D, double x0, double y0) const;
   void integrate();
   double compute_H(double x, double y) const;
 
 public:
   // Simulation();
-  Simulation(double dt, double A, double B, double C, double D, double x0 = 0.,
-             double y0 = 0.);
+  Simulation(double dt, double A, double B, double C, double D, double x0 = 0., double y0 = 0.);
   double dt() const;
   double const& getParameter(std::size_t i) const;
   std::size_t steps() const;

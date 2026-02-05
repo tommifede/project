@@ -4,12 +4,10 @@
 #include <fstream>
 
 namespace lotka_volterra {
-void Simulation::check_parameters(double dt, double A, double B, double C,
-                                  double D, double x0, double y0) const
+void Simulation::check_parameters(double dt, double A, double B, double C, double D, double x0, double y0) const
 {
   if (dt != std::clamp(dt, 0.0001, 0.01)) {
-    throw std::invalid_argument(
-        "parameter dt must be between 0.0001 and 0.01.");
+    throw std::invalid_argument("parameter dt must be between 0.0001 and 0.01.");
   }
   if (A <= 0. || B <= 0. || C <= 0. || D <= 0.) {
     throw std::invalid_argument("parameters A, B, C, D must be > 0.");
@@ -37,15 +35,12 @@ double Simulation::compute_H(double x, double y) const
   double B = getParameter(1);
   double C = getParameter(2);
   double D = getParameter(3);
-  double H = (x > 0 && y > 0)
-               ? (-D * std::log(x) + C * x + B * y - A * std::log(y))
-               : std::numeric_limits<double>::infinity();
+  double H = (x > 0 && y > 0) ? (-D * std::log(x) + C * x + B * y - A * std::log(y)) : std::numeric_limits<double>::infinity();
   return H;
 }
 
 
-Simulation::Simulation(double dt, double A, double B, double C, double D,
-                       double x0, double y0)
+Simulation::Simulation(double dt, double A, double B, double C, double D, double x0, double y0)
     : dt_{dt}
     , x_rel_{x0 * C / D}
     , y_rel_{y0 * B / A}

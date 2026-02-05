@@ -35,14 +35,18 @@ TEST_CASE("Renderer draws by step without crashing")
   CHECK_NOTHROW(r.draw(window, sim, 6));
 }
 
-TEST_CASE("Renderer draws equilibrium point and draws axes without crashing")
+TEST_CASE("Renderer sets draw and draws components without crashing")
 {
   lotka_volterra::Renderer r(800);
   sf::RenderWindow window(sf::VideoMode(800, 800), "test", sf::Style::None);
   sf::View view;
-
+  lotka_volterra::Simulation s(0.01, 2., 0.1, 0.1, 1., 10., 10.);
+  CHECK_NOTHROW(r.setDraw(window, s, 1, view, view));
   CHECK_NOTHROW(r.drawEqPoints(window, view, view));
   CHECK_NOTHROW(r.drawAxes(window, view));
+  CHECK_NOTHROW(r.drawTicks(window, view));
+  CHECK_NOTHROW(r.drawTitles(window, view));
+  CHECK_NOTHROW(r.drawTrajectory(window, s, 1, view));
 }
 
 TEST_CASE("Renderer input creates a proper renderer")

@@ -14,8 +14,7 @@ TEST_CASE("Simulation constructor works and initialize correctly")
   CHECK(s0.x == 5.);
   CHECK(s0.y == 6.);
 
-  double expected_H =
-      -4. * std::log(5.) + 3. * 5. + 2. * 6. - 1. * std::log(6.);
+  double expected_H = -4. * std::log(5.) + 3. * 5. + 2. * 6. - 1. * std::log(6.);
   CHECK(s0.H == doctest::Approx(expected_H));
 }
 
@@ -155,10 +154,8 @@ TEST_CASE("Trajectory convergence for dt -> 0")
     std::size_t i1 = static_cast<std::size_t>(t / 0.01);
     std::size_t i2 = static_cast<std::size_t>(t / 0.001);
 
-    lotka_volterra::State const& s1 =
-        sim_dt1.stateAt(std::min(i1, sim_dt1.steps() - 1));
-    lotka_volterra::State const& s2 =
-        sim_dt2.stateAt(std::min(i2, sim_dt2.steps() - 1));
+    lotka_volterra::State const& s1 = sim_dt1.stateAt(std::min(i1, sim_dt1.steps() - 1));
+    lotka_volterra::State const& s2 = sim_dt2.stateAt(std::min(i2, sim_dt2.steps() - 1));
     lotka_volterra::State const& s3 = sim_dt3.stateAt(i3);
 
     CHECK(s2.x == doctest::Approx(s3.x).epsilon(1e-2));
@@ -211,8 +208,7 @@ TEST_CASE("Simulation input creates a proper simulation")
 {
   CHECK_NOTHROW(io::inputSimulation({0.001, 1., 1., 1., 1., 1., 1.}));
 
-  lotka_volterra::Simulation sim =
-      io::inputSimulation({0.001, 1., 1., 1., 1., 1., 1.});
+  lotka_volterra::Simulation sim = io::inputSimulation({0.001, 1., 1., 1., 1., 1., 1.});
   CHECK(sim.dt() == 0.001);
 
   CHECK_THROWS(io::inputSimulation({0.1, 1., 1., 1., 1., 1., 1.}));
