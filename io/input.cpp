@@ -8,11 +8,9 @@ std::string trim(std::string& s)
 {
   auto not_space = [](unsigned char c) { return !std::isspace(c); }; // lambda expression to identify a non-space character
 
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(),
-                                  not_space)); // erase first white spaces
-  s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(),
-          s.end()); // erase last white spaces; base convert reverse iterator to
-                    // (next) iterator
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), not_space));        // erase first white spaces
+  s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(), s.end()); // erase last white spaces; base convert reverse iterator to
+                                                                          // (next) iterator
 
   return s;
 }
@@ -29,8 +27,8 @@ double readDouble(std::string const& var, std::string const& prompt, double min,
   }
 
   double val; // type: double
-  auto [ptr, ec] = std::from_chars(input.data(), input.data() + input.size(),
-                                   val); // if totally non-numeric input, ec = std::errc::invalid_argument
+  auto [ptr, ec] =
+      std::from_chars(input.data(), input.data() + input.size(), val); // if totally non-numeric input, ec = std::errc::invalid_argument
 
   if (ec != std::errc{}) {
     throw std::invalid_argument("non-numeric input for " + var + ".");

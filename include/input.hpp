@@ -16,10 +16,8 @@ struct SimulationParameters
 };
 
 std::string trim(std::string& s);
-double readDouble(std::string const& var, std::string const& prompt, double min,
-                  double max, bool strict = true);
-std::size_t readSize(std::string const& var, std::string const& prompt,
-                     std::size_t min, std::size_t max);
+double readDouble(std::string const& var, std::string const& prompt, double min, double max, bool strict = true);
+std::size_t readSize(std::string const& var, std::string const& prompt, std::size_t min, std::size_t max);
 SimulationParameters askSimulationParameters();
 std::size_t askSize();
 lotka_volterra::Simulation inputSimulation(SimulationParameters sim_p);

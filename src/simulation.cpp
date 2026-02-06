@@ -21,10 +21,10 @@ void Simulation::integrate()
 {
   double A            = getParameter(0);
   double D            = getParameter(3);
-  const double x_prev = x_rel_;
-  const double y_prev = y_rel_;
-  const double x_new  = x_prev + A * (1 - y_prev) * x_prev * dt_;
-  const double y_new  = y_prev + D * (x_prev - 1) * y_prev * dt_;
+  const double x_prev = x_rel_;                                   // x_(i)
+  const double y_prev = y_rel_;                                   // y_(i)
+  const double x_new  = x_prev + A * (1 - y_prev) * x_prev * dt_; // x_(i+1)
+  const double y_new  = y_prev + D * (x_prev - 1) * y_prev * dt_; // y_(i+1)
   x_rel_              = std::max(0., x_new);
   y_rel_              = std::max(0., y_new);
 }
@@ -80,23 +80,23 @@ void Simulation::evolve()
   double B                = getParameter(1);
   double C                = getParameter(2);
   double D                = getParameter(3);
-  x_rel_                  = last_state.x * C / D;
-  y_rel_                  = last_state.y * B / A;
+  x_rel_                  = last_state.x * C / D; // from x to x_rel
+  y_rel_                  = last_state.y * B / A; // from y to y_rel
   integrate();
-  double x_abs = x_rel_ * D / C;
-  double y_abs = y_rel_ * A / B;
+  double x_abs = x_rel_ * D / C; // from x_rel to x
+  double y_abs = y_rel_ * A / B; // from y_rel to y
   states_.push_back({x_abs, y_abs, compute_H(x_abs, y_abs)});
 }
 
 void Simulation::evolveSteps(std::size_t add_steps)
-{
+{ // "overload" of evolve
   for (std::size_t i = 0; i < add_steps; ++i) {
     evolve();
   }
 }
 
 void Simulation::evolveTime(double T)
-{
+{ // "overload" of evolveSteps
   if (T < 0) {
     throw std::invalid_argument("parameter T must be positive.");
   }

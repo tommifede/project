@@ -5,12 +5,17 @@
 int main()
 {
   try {
+    // interactive input
     lotka_volterra::Simulation sim = io::inputSimulation();
+    lotka_volterra::Renderer ren   = io::inputRenderer();
+    double T                       = io::inputTime(sim);
+    // direct input
     // lotka_volterra::Simulation sim = io::inputSimulation({0.001, 10., 6., 4., 12., 4., 3.});
-    lotka_volterra::Renderer ren = io::inputRenderer();
-    // lotka_volterra::Renderer ren = io::inputRenderer(1000);
-    double T = io::inputTime(sim);
-    // double T = 10;
+    // lotka_volterra::Renderer ren   = io::inputRenderer(1000);
+    // double T                       = 10.;
+    // or
+    // lotka_volterra::Simulation sim{0.001, 10., 6., 4., 12., 4., 3.};
+    // lotka_volterra::Renderer ren{1000};
 
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8; // smooth trajectory

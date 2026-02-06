@@ -25,7 +25,6 @@ private:
   double compute_H(double x, double y) const;
 
 public:
-  // Simulation();
   Simulation(double dt, double A, double B, double C, double D, double x0 = 0., double y0 = 0.);
   double dt() const;
   double const& getParameter(std::size_t i) const;

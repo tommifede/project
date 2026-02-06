@@ -44,7 +44,7 @@ sf::Color Renderer::color_energy(double H, double H0) const
 double Renderer::compute_tick_step(double max_value)
 {
   if (max_value <= 0.) {
-    return 1.; // grafico banale
+    return 1.; // standard graph
   }
 
   double raw_step = max_value / tick_count_;
@@ -166,8 +166,7 @@ void Renderer::drawAxes(sf::RenderWindow& window, sf::View const& ui_view)
   sf::Vertex x_axis[] = {{{axis_offset_, y0_}, sf::Color::Black},
                          {{axis_offset_ + axis_length_, y0_}, sf::Color::Black}}; // 2 points with same y
 
-  sf::Vertex y_axis[] = {{{axis_offset_, y0_}, sf::Color::Black},
-                         {{axis_offset_, axis_offset_}, sf::Color::Black}}; // 2 points with same x
+  sf::Vertex y_axis[] = {{{axis_offset_, y0_}, sf::Color::Black}, {{axis_offset_, axis_offset_}, sf::Color::Black}}; // 2 points with same x
 
   window.draw(x_axis, 2, sf::Lines); // x_axis here is a pointer to its first vertex
   window.draw(y_axis, 2, sf::Lines); // y_axis here is a pointer to its first vertex
@@ -219,15 +218,13 @@ void Renderer::drawTicks(sf::RenderWindow& window, sf::View const& ui_view)
 
     window.draw(label_);
 
-    sf::Vertex grid[] = {{{axis_offset_, py}, grid_color},
-                         {{axis_offset_ + axis_length_, py}, grid_color}}; // horizontal line of grid
+    sf::Vertex grid[] = {{{axis_offset_, py}, grid_color}, {{axis_offset_ + axis_length_, py}, grid_color}}; // horizontal line of grid
 
     window.draw(grid, 2, sf::Lines); // grid here is a pointer to its first vertex
   }
 }
 
-void Renderer::drawTrajectory(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step,
-                              sf::View const& world_view)
+void Renderer::drawTrajectory(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step, sf::View const& world_view)
 {
   check_set();
   window.setView(world_view); // in units

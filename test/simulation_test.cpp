@@ -6,7 +6,7 @@
 
 TEST_CASE("Simulation constructor works and initialize correctly")
 {
-  lotka_volterra::Simulation sim(0.001, 1., 2., 3., 4., 5., 6.);
+  lotka_volterra::Simulation sim{0.001, 1., 2., 3., 4., 5., 6.};
 
   CHECK(sim.steps() == 1);
 
@@ -20,7 +20,7 @@ TEST_CASE("Simulation constructor works and initialize correctly")
 
 TEST_CASE("Simulation evolves correctly")
 {
-  lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1., 10., 5.);
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 10., 5.};
 
   sim.evolve();
 
@@ -33,19 +33,19 @@ TEST_CASE("Simulation evolves correctly")
 
 TEST_CASE("lotka_volterra::Simulation constructor throws on invalid parameters")
 {
-  CHECK_THROWS(lotka_volterra::Simulation(0., 1., 1., 1., 1.));
-  CHECK_THROWS(lotka_volterra::Simulation(0.00001, 1., 1., 1., 1.));
-  CHECK_THROWS(lotka_volterra::Simulation(0.1, 1., 1., 1., 1.));
-  CHECK_THROWS(lotka_volterra::Simulation(-0.1, 1., 1., 1., 1.));
-  CHECK_THROWS(lotka_volterra::Simulation(0.001, -1., 1., 1., 1.));
-  CHECK_THROWS(lotka_volterra::Simulation(0.001, 1., 0., 1., 1.));
-  CHECK_THROWS(lotka_volterra::Simulation(0.001, 1., 1., 1., 1., -1., 0.));
-  CHECK_THROWS(lotka_volterra::Simulation(0.001, 1., 1., 1., 1., 1., -1.));
+  CHECK_THROWS(lotka_volterra::Simulation{0., 1., 1., 1., 1.});
+  CHECK_THROWS(lotka_volterra::Simulation{0.00001, 1., 1., 1., 1.});
+  CHECK_THROWS(lotka_volterra::Simulation{0.1, 1., 1., 1., 1.});
+  CHECK_THROWS(lotka_volterra::Simulation{-0.1, 1., 1., 1., 1.});
+  CHECK_THROWS(lotka_volterra::Simulation{0.001, -1., 1., 1., 1.});
+  CHECK_THROWS(lotka_volterra::Simulation{0.001, 1., 0., 1., 1.});
+  CHECK_THROWS(lotka_volterra::Simulation{0.001, 1., 1., 1., 1., -1., 0.});
+  CHECK_THROWS(lotka_volterra::Simulation{0.001, 1., 1., 1., 1., 1., -1.});
 }
 
 TEST_CASE("Evolve with integer steps")
 {
-  lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1., 10., 5.);
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 10., 5.};
   sim.evolveSteps(100);
 
   CHECK(sim.steps() == 101);
@@ -53,7 +53,7 @@ TEST_CASE("Evolve with integer steps")
 
 TEST_CASE("Evolve with time T")
 {
-  lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1., 10., 5.);
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 10., 5.};
   sim.evolveTime(0.1);
 
   CHECK(sim.steps() == 101);
@@ -64,7 +64,7 @@ TEST_CASE("Evolve with time T")
 
 TEST_CASE("Extinction of prey keeps x at zero")
 {
-  lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1., 0., 5.);
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 0., 5.};
   sim.evolveSteps(100);
 
   for (std::size_t i = 0; i < sim.steps(); ++i) {
@@ -74,7 +74,7 @@ TEST_CASE("Extinction of prey keeps x at zero")
 
 TEST_CASE("Extinction of predator keeps y at zero")
 {
-  lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1., 5., 0.);
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 5., 0.};
   sim.evolveSteps(100);
 
   for (std::size_t i = 0; i < sim.steps(); ++i) {
@@ -84,10 +84,10 @@ TEST_CASE("Extinction of predator keeps y at zero")
 
 TEST_CASE("H is infinite on extinction")
 {
-  lotka_volterra::Simulation sim1(0.001, 1., 1., 1., 1., 0., 5.);
+  lotka_volterra::Simulation sim1{0.001, 1., 1., 1., 1., 0., 5.};
   CHECK(std::isinf(sim1.stateAt(0).H));
 
-  lotka_volterra::Simulation sim2(0.001, 1., 1., 1., 1., 5., 0.);
+  lotka_volterra::Simulation sim2{0.001, 1., 1., 1., 1., 5., 0.};
   CHECK(std::isinf(sim2.stateAt(0).H));
 }
 
@@ -101,13 +101,13 @@ TEST_CASE("Convergence for dt -> 0")
   double y0 = 5.;
   double T  = 1.;
 
-  lotka_volterra::Simulation sim_dt1(0.01, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim_dt1{0.01, A, B, C, D, x0, y0};
   sim_dt1.evolveTime(T);
 
-  lotka_volterra::Simulation sim_dt2(0.001, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim_dt2{0.001, A, B, C, D, x0, y0};
   sim_dt2.evolveTime(T);
 
-  lotka_volterra::Simulation sim_dt3(0.0001, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim_dt3{0.0001, A, B, C, D, x0, y0};
   sim_dt3.evolveTime(T);
 
   lotka_volterra::State const& s1 = sim_dt1.stateAt(sim_dt1.steps() - 1);
@@ -122,7 +122,7 @@ TEST_CASE("Convergence for dt -> 0")
 
 TEST_CASE("H remains approximately constant")
 {
-  lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1., 10., 5.);
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 10., 5.};
   sim.evolveTime(1.);
 
   double H0 = sim.stateAt(0).H;
@@ -139,13 +139,13 @@ TEST_CASE("Trajectory convergence for dt -> 0")
   double x0 = 10., y0 = 5.;
   double T = 1.0;
 
-  lotka_volterra::Simulation sim_dt1(0.01, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim_dt1{0.01, A, B, C, D, x0, y0};
   sim_dt1.evolveTime(T);
 
-  lotka_volterra::Simulation sim_dt2(0.001, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim_dt2{0.001, A, B, C, D, x0, y0};
   sim_dt2.evolveTime(T);
 
-  lotka_volterra::Simulation sim_dt3(0.0001, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim_dt3{0.0001, A, B, C, D, x0, y0};
   sim_dt3.evolveTime(T);
 
   std::size_t steps3 = sim_dt3.steps();
@@ -178,11 +178,11 @@ TEST_CASE("Estimate numerical convergence order")
   double dt2 = 0.001;
   double dt3 = 0.0001;
 
-  lotka_volterra::Simulation sim1(dt1, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim1{dt1, A, B, C, D, x0, y0};
   sim1.evolveTime(T);
-  lotka_volterra::Simulation sim2(dt2, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim2{dt2, A, B, C, D, x0, y0};
   sim2.evolveTime(T);
-  lotka_volterra::Simulation sim3(dt3, A, B, C, D, x0, y0);
+  lotka_volterra::Simulation sim3{dt3, A, B, C, D, x0, y0};
   sim3.evolveTime(T);
 
   lotka_volterra::State const& s1 = sim1.stateAt(sim1.steps() - 1);
@@ -192,14 +192,14 @@ TEST_CASE("Estimate numerical convergence order")
   double error1 = std::abs(s1.x - s3.x);
   double error2 = std::abs(s2.x - s3.x);
 
-  // Ordine di convergenza p ≈ log(error1/error2)/log(dt1/dt2)
+  // Convergence order p = log(error1/error2)/log(dt1/dt2)
   double p = std::log(error1 / error2) / std::log(dt1 / dt2);
   CHECK(p == doctest::Approx(1.).epsilon(0.01));
 }
 
 TEST_CASE("CSV output works correctly")
 {
-  lotka_volterra::Simulation sim(0.001, 1., 1., 1., 1.);
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1.};
   sim.evolveTime(1.);
   io::outputCSV(sim, "trajectory.csv");
 }
