@@ -88,7 +88,7 @@ H(x,y) &= -D\ln(x)+Cx+By-A\ln(y)
 \end{align*}
 $$
 
-Henceforth, the first integral will be denoted as the **energy** of the system.
+Henceforth, the first integral will be denoted as the **energy** of the system (by abuse of terminology.
 
 ---
 
@@ -131,9 +131,11 @@ This prevents the simulation and the renderer from operating on invalid or incon
 #### Simulation implementation
 The simulation of the Lotka–Volterra system is implemented through a `Simulation` class.    
 The state of the system at each time is represented by a `State` struct, containing the populations $x$, $y$ and the value of the first integral $H$.    
-The `Simulation` class stores the time step `dt_`, the relative variables `x_rel_` and `y_rel_`, a vector of states `states_` and a vector of model parameters `pars_`.    
+The `Simulation` class stores the time step `dt_`, the relative variables `x_rel_` and `y_rel_`, a vector of states `states_`, an array of model parameters `pars_`, a stability flag `unstable_` and the maximum relative energy variation `max_rel_drift_`.    
     
-Private methods are used to check parameter validity, perform a single integration step and compute the energy. The public interface allows access to the simulation data and provides methods to evolve the system by one step, by a fixed number of steps or over a given time interval.
+Private methods are used to check parameter validity, perform a single integration step and compute the energy. The public interface allows access to the simulation data and provides methods to evolve the system by one step, by a fixed number of steps or over a given time interval.    
+
+Numerical instability is detected by monitoring the relative variation of the first integral; if a tolerance proportional to the time step is exceeded, the simulation is marked as unstable and automatically stopped.
 
 #### Renderer implementation
 The `Renderer` class handles the graphical representation of the Lotka–Volterra simulation using SFML.    
@@ -157,13 +159,15 @@ The simulation parameters and initial conditions can be provided in two differen
 - **directly**, through the class constructors or specific setter functions, allowing programmatic configuration;
 - **interactively**, through higher-level input functions that prompt the user via the terminal and validate the provided values.    
     
-The output functionality provides a method to export the simulation data to a **CSV file**. At the end of the simulation, all recorded states (including time, prey and predator populations and the corresponding energy values) are written to disk in a structured, comma-separated format, allowing the results to be easily analyzed or post-processed using external tools.
+The output functionality provides methods to print a summary of the simulation outcome to the terminal and to export the simulation data to a **CSV file**.    
+
+At the end of the simulation, all recorded states (including time, prey and predator populations and the corresponding energy values) are written to disk in a structured, comma-separated format, allowing the results to be easily analyzed or post-processed using external tools.
 
 #### Main implementation
 The `main.cpp` file manages the execution of the simulation and the rendering of results.    
 It first collects simulation parameters, initial conditions and rendering settings, either interactively from the user or programmatically from pre-defined values. A rendering window is created using SFML with customizable settings such as antialiasing (enabled to improve the visual smoothness of the trajectories and reduce jagged edges). 
     
-The program then iterates over the simulation time steps: at each step, it evolves the system according to the discrete-time Lotka--Volterra model and draws the current state on the window. After the simulation completes, the trajectory data are exported to a CSV file.    
+The program then iterates over the simulation time steps: at each step, it evolves the system according to the discrete-time Lotka--Volterra model, draws the current state on the window and monitors numerical stability. After the simulation completes or is aborted due to numerical instability, a summary of the simulation outcome is printed to the terminal and the trajectory data are exported to a CSV file.    
     
 All operations are enclosed in a `try`/`catch` block to handle exceptions raised during parameter validation, evolution or rendering, ensuring that errors are reported clearly without abrupt termination.
 
