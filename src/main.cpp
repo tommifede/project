@@ -36,12 +36,6 @@ int main()
       while (win.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
           win.close();
-          std::cout << "\nSimulation finished\n";
-          std::cout << "Total steps performed: " << sim.steps() << "\n";
-          std::cout << "Status: ABORTED\n";
-
-          io::outputCSV(sim, "trajectory.csv");
-          return 0;
         }
       }
 
