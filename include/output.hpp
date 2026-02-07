@@ -5,6 +5,7 @@
 #include <string>
 
 namespace io {
+void outputStatus(lotka_volterra::Simulation const& simulation);
 void outputCSV(lotka_volterra::Simulation const& simulation, std::string const& filename);
 } // namespace io
 

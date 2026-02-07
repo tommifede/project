@@ -66,16 +66,9 @@ int main()
       win.display();
     }
 
-    std::cout << "\nSimulation finished\n";
-    std::cout << "Total steps performed: " << sim.steps() << "\n";
-    std::cout << "Status: ";
-    if (sim.isUnstable()) {
-      std::cout << "ABORTED (unstable) | H = " << sim.H() << " | dH/H = " << sim.maxRelDrift() << "\n";
-    } else {
-      std::cout << "COMPLETED\n";
-    }
-
+    io::outputStatus(sim);
     io::outputCSV(sim, "trajectory.csv");
+
     return 0;
   } catch (std::exception const& e) {
     std::cerr << "Fatal error: " << e.what() << '\n';
