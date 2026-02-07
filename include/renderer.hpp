@@ -28,26 +28,26 @@ private:
   float eq_point_radius_        = 5.f;
   bool set_                     = false;
 
-  void check_parameter(std::size_t size);
-  void check_set();
-  sf::Color color_energy(double H, double H0) const;
-  double compute_tick_step(double max_value);
-  double step_tick(double margin, double max_x, double max_y);
-  double max_world(double margin, double max_x, double max_y);
-  double scale(double world_max, float axis_offset, sf::View ui_view);
-  void update_trajectory(Simulation const& simulation, std::size_t current_step);
+  void check_parameter(std::size_t size) const;
+  void check_set() const;
   void validate_window(sf::RenderWindow const& window) const;
+  sf::Color color_energy(double H, double H0) const;
+  double compute_tick_step(double max_value) const;
+  double step_tick(double margin, double max_x, double max_y) const;
+  double max_world(double margin, double max_x, double max_y) const;
+  double scale(double world_max, float axis_offset, sf::View const& ui_view) const;
+  void update_trajectory(Simulation const& simulation, std::size_t current_step);
 
 public:
   Renderer(std::size_t size);
   std::size_t size() const;
   void setDraw(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step, sf::View const& ui_view,
                sf::View& world_view, double margin = 1.2, float axis_offset = 100.f);
-  void drawAxes(sf::RenderWindow& window, sf::View const& ui_view);
+  void drawAxes(sf::RenderWindow& window, sf::View const& ui_view) const;
   void drawTicks(sf::RenderWindow& window, sf::View const& ui_view);
   void drawTrajectory(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step, sf::View const& world_view);
-  void drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view, sf::View const& world_view);
-  void drawTitles(sf::RenderWindow& window, sf::View const& ui_view);
+  void drawEqPoints(sf::RenderWindow& window, sf::View const& ui_view, sf::View const& world_view) const;
+  void drawTitles(sf::RenderWindow& window, sf::View const& ui_view) const;
   void draw(sf::RenderWindow& window, Simulation const& simulation, std::size_t current_step);
   void draw(sf::RenderWindow& window, Simulation const& simulation);
 };

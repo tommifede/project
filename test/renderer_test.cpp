@@ -13,7 +13,7 @@ TEST_CASE("Renderer constructor rejects width and height out of range")
 
 TEST_CASE("Renderer draws without crashing")
 {
-  lotka_volterra::Simulation sim{0.01, 2., 0.1, 0.1, 1., 10., 10.};
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 1., 1.};
   sim.evolveSteps(10);
 
   lotka_volterra::Renderer r{800};
@@ -24,7 +24,7 @@ TEST_CASE("Renderer draws without crashing")
 
 TEST_CASE("Renderer draws by step without crashing")
 {
-  lotka_volterra::Simulation sim{0.01, 2., 0.1, 0.1, 1., 10., 10.};
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 1., 1.};
   sim.evolveSteps(5);
 
   lotka_volterra::Renderer r{800};

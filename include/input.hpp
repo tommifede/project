@@ -15,7 +15,7 @@ struct SimulationParameters
   double y0;
 };
 
-std::string trim(std::string& s);
+void trim(std::string& s);
 double readDouble(std::string const& var, std::string const& prompt, double min, double max, bool strict = true);
 std::size_t readSize(std::string const& var, std::string const& prompt, std::size_t min, std::size_t max);
 SimulationParameters askSimulationParameters();

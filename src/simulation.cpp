@@ -19,26 +19,32 @@ void Simulation::check_parameters(double dt, double A, double B, double C, doubl
 
 void Simulation::integrate()
 {
-  double A            = getParameter(0);
-  double D            = getParameter(3);
-  const double x_prev = x_rel_;                                   // x_(i)
-  const double y_prev = y_rel_;                                   // y_(i)
-  const double x_new  = x_prev + A * (1 - y_prev) * x_prev * dt_; // x_(i+1)
-  const double y_new  = y_prev + D * (x_prev - 1) * y_prev * dt_; // y_(i+1)
-  x_rel_              = std::max(0., x_new);
-  y_rel_              = std::max(0., y_new);
+  double const A = pars_[0];
+  double const D = pars_[3];
+
+  double const x = x_rel_; // x_(i)
+  double const y = y_rel_; // y_(i)
+
+  double const x_next = x + A * (1 - y) * x * dt_; // x_(i+1)
+  double const y_next = y + D * (x - 1) * y * dt_; // y_(i+1)
+
+  x_rel_ = std::max(0., x_next);
+  y_rel_ = std::max(0., y_next);
 }
 
-double Simulation::compute_H(double x, double y) const
+double Simulation::compute_H(double x, double y)
 {
-  double A = getParameter(0);
-  double B = getParameter(1);
-  double C = getParameter(2);
-  double D = getParameter(3);
+  double const A = pars_[0];
+  double const B = pars_[1];
+  double const C = pars_[2];
+  double const D = pars_[3];
+
   double H = (x > 0 && y > 0) ? (-D * std::log(x) + C * x + B * y - A * std::log(y)) : std::numeric_limits<double>::infinity();
+  if (!std::isfinite(H)) {
+    unstable_ = true;
+  }
   return H;
 }
-
 
 Simulation::Simulation(double dt, double A, double B, double C, double D, double x0, double y0)
     : dt_{dt}
@@ -55,10 +61,20 @@ double Simulation::dt() const
   return dt_;
 }
 
+double Simulation::H() const
+{
+  return states_.back().H;
+}
+
+double Simulation::maxRelDrift() const
+{
+  return max_rel_drift_;
+}
+
 double const& Simulation::getParameter(std::size_t i) const
 {
   if (i > 3) {
-    throw std::invalid_argument("parameter index out of range.");
+    throw std::out_of_range("parameter index out of range.");
   }
   return pars_[i];
 }
@@ -73,29 +89,49 @@ State const& Simulation::stateAt(std::size_t i) const
   return states_.at(i);
 }
 
-void Simulation::evolve()
+bool Simulation::evolve()
 {
-  State const& last_state = states_.back();
-  double A                = getParameter(0);
-  double B                = getParameter(1);
-  double C                = getParameter(2);
-  double D                = getParameter(3);
-  x_rel_                  = last_state.x * C / D; // from x to x_rel
-  y_rel_                  = last_state.y * B / A; // from y to y_rel
+  double const A = pars_[0];
+  double const B = pars_[1];
+  double const C = pars_[2];
+  double const D = pars_[3];
+
+  State const& curr_state = states_.back();
+  x_rel_                  = curr_state.x * C / D; // from x to x_rel
+  y_rel_                  = curr_state.y * B / A; // from y to y_rel
+
   integrate();
-  double x_abs = x_rel_ * D / C; // from x_rel to x
-  double y_abs = y_rel_ * A / B; // from y_rel to y
-  states_.push_back({x_abs, y_abs, compute_H(x_abs, y_abs)});
+
+  double x_next = x_rel_ * D / C; // from x_rel to x
+  double y_next = y_rel_ * A / B; // from y_rel to y
+
+  double H_next = compute_H(x_next, y_next);
+
+  if (states_.size() >= 2) {
+    double const H_tol = 50. * dt_;                                                // energy relative tolerance (dH/H = O(dt))
+    double rel_drift   = std::abs(H_next - curr_state.H) / std::abs(curr_state.H); // energy relative variation
+
+    if (rel_drift > H_tol) {
+      unstable_      = true;
+      max_rel_drift_ = rel_drift;
+      return false;
+    }
+  }
+  states_.push_back({x_next, y_next, H_next});
+  return true;
 }
 
-void Simulation::evolveSteps(std::size_t add_steps)
+bool Simulation::evolveSteps(std::size_t add_steps)
 { // "overload" of evolve
   for (std::size_t i = 0; i < add_steps; ++i) {
-    evolve();
+    if (!evolve()) {
+      return false;
+    }
   }
+  return true;
 }
 
-void Simulation::evolveTime(double T)
+bool Simulation::evolveTime(double T)
 { // "overload" of evolveSteps
   if (T < 0) {
     throw std::invalid_argument("parameter T must be positive.");
@@ -107,6 +143,11 @@ void Simulation::evolveTime(double T)
   }
 
   std::size_t steps = static_cast<std::size_t>(std::round(n));
-  evolveSteps(steps);
+  return evolveSteps(steps);
+}
+
+bool Simulation::isUnstable() const
+{
+  return unstable_;
 }
 } // namespace lotka_volterra

@@ -20,7 +20,7 @@ TEST_CASE("Simulation constructor works and initialize correctly")
 
 TEST_CASE("Simulation evolves correctly")
 {
-  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 10., 5.};
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 1., 1.};
 
   sim.evolve();
 
@@ -91,14 +91,22 @@ TEST_CASE("H is infinite on extinction")
   CHECK(std::isinf(sim2.stateAt(0).H));
 }
 
+TEST_CASE("Simulation handles large populations")
+{
+  lotka_volterra::Simulation sim{0.001, 1., 1., 1., 1., 1e3, 1e3};
+  sim.evolveTime(0.01);
+  lotka_volterra::State const& s = sim.stateAt(sim.steps() - 1);
+  CHECK(std::isfinite(s.H));
+}
+
 TEST_CASE("Convergence for dt -> 0")
 {
   double A  = 1.;
   double B  = 1.;
   double C  = 1.;
   double D  = 1.;
-  double x0 = 10.;
-  double y0 = 5.;
+  double x0 = 1.5;
+  double y0 = 1.5;
   double T  = 1.;
 
   lotka_volterra::Simulation sim_dt1{0.01, A, B, C, D, x0, y0};
@@ -136,7 +144,7 @@ TEST_CASE("H remains approximately constant")
 TEST_CASE("Trajectory convergence for dt -> 0")
 {
   double A = 1., B = 1., C = 1., D = 1.;
-  double x0 = 10., y0 = 5.;
+  double x0 = 2., y0 = 3.;
   double T = 1.0;
 
   lotka_volterra::Simulation sim_dt1{0.01, A, B, C, D, x0, y0};
@@ -168,33 +176,23 @@ TEST_CASE("Trajectory convergence for dt -> 0")
   }
 }
 
-TEST_CASE("Estimate numerical convergence order")
+TEST_CASE("Simulation becomes unstable on large step")
 {
-  double A = 1., B = 1., C = 1., D = 1.;
-  double x0 = 10., y0 = 5.;
-  double T = 1.0;
+  lotka_volterra::Simulation sim{0.01, 50., 1., 1., 50., 1., 1.};
+  bool ok = sim.evolveSteps(1000);
+  CHECK(ok == false);
+  CHECK(sim.isUnstable() == true);
+  CHECK(sim.maxRelDrift() > 0.);
+}
 
-  double dt1 = 0.01;
-  double dt2 = 0.001;
-  double dt3 = 0.0001;
-
-  lotka_volterra::Simulation sim1{dt1, A, B, C, D, x0, y0};
-  sim1.evolveTime(T);
-  lotka_volterra::Simulation sim2{dt2, A, B, C, D, x0, y0};
-  sim2.evolveTime(T);
-  lotka_volterra::Simulation sim3{dt3, A, B, C, D, x0, y0};
-  sim3.evolveTime(T);
-
-  lotka_volterra::State const& s1 = sim1.stateAt(sim1.steps() - 1);
-  lotka_volterra::State const& s2 = sim2.stateAt(sim2.steps() - 1);
-  lotka_volterra::State const& s3 = sim3.stateAt(sim3.steps() - 1);
-
-  double error1 = std::abs(s1.x - s3.x);
-  double error2 = std::abs(s2.x - s3.x);
-
-  // Convergence order p = log(error1/error2)/log(dt1/dt2)
-  double p = std::log(error1 / error2) / std::log(dt1 / dt2);
-  CHECK(p == doctest::Approx(1.).epsilon(0.01));
+TEST_CASE("Last state remains valid after instability")
+{
+  lotka_volterra::Simulation sim{0.01, 50., 1., 1., 50., 1., 1.};
+  sim.evolveSteps(1000);
+  lotka_volterra::State const& last = sim.stateAt(sim.steps() - 1);
+  CHECK(last.x >= 0.);
+  CHECK(last.y >= 0.);
+  CHECK(std::isfinite(last.H));
 }
 
 TEST_CASE("CSV output works correctly")

@@ -4,15 +4,13 @@
 #include <iostream>
 
 namespace io {
-std::string trim(std::string& s)
+void trim(std::string& s)
 {
   auto not_space = [](unsigned char c) { return !std::isspace(c); }; // lambda expression to identify a non-space character
 
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), not_space));        // erase first white spaces
-  s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(), s.end()); // erase last white spaces; base convert reverse iterator to
-                                                                          // (next) iterator
-
-  return s;
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), not_space)); // erase first white spaces
+  s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(),
+          s.end()); // erase last white spaces; base() convert reverse iterator to (next) iterator
 }
 
 double readDouble(std::string const& var, std::string const& prompt, double min, double max, bool strict)
@@ -51,7 +49,6 @@ double readDouble(std::string const& var, std::string const& prompt, double min,
 
   return value;
 }
-
 
 std::size_t readSize(std::string const& var, std::string const& prompt, std::size_t min, std::size_t max)
 {
@@ -149,7 +146,7 @@ double inputTime(lotka_volterra::Simulation const& sim)
 {
   std::cout << "Insert time of simulation, multiple of " << sim.dt() << "\n";
 
-  double T = readDouble("T", "T (double, >0): ", 0, 1e6);
+  double T = readDouble("T", "T (double, >0): ", 0, sim.dt() * 1e7);
   double n = T / sim.dt();
 
   if (std::abs(n - std::round(n)) > 1e-8) {
