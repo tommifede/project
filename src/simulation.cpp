@@ -22,11 +22,11 @@ void Simulation::integrate()
   double const A = pars_[0];
   double const D = pars_[3];
 
-  double const x = x_rel_; // x_(i)
-  double const y = y_rel_; // y_(i)
+  double const x = x_rel_; 
+  double const y = y_rel_; 
 
-  double const x_next = x + A * (1 - y) * x * dt_; // x_(i+1)
-  double const y_next = y + D * (x - 1) * y * dt_; // y_(i+1)
+  double const x_next = x + A * (1 - y) * x * dt_; 
+  double const y_next = y + D * (x - 1) * y * dt_; 
 
   x_rel_ = std::max(0., x_next);
   y_rel_ = std::max(0., y_next);
@@ -97,19 +97,19 @@ bool Simulation::evolve()
   double const D = pars_[3];
 
   State const& curr_state = states_.back();
-  x_rel_                  = curr_state.x * C / D; // from x to x_rel
-  y_rel_                  = curr_state.y * B / A; // from y to y_rel
+  x_rel_                  = curr_state.x * C / D; 
+  y_rel_                  = curr_state.y * B / A; 
 
   integrate();
 
-  double x_next = x_rel_ * D / C; // from x_rel to x
-  double y_next = y_rel_ * A / B; // from y_rel to y
+  double x_next = x_rel_ * D / C; 
+  double y_next = y_rel_ * A / B; 
 
   double H_next = compute_H(x_next, y_next);
 
   if (states_.size() >= 2) {
-    double const H_tol = 50. * dt_;                                                // energy relative tolerance (dH/H = O(dt))
-    double rel_drift   = std::abs(H_next - curr_state.H) / std::abs(curr_state.H); // energy relative variation
+    double const H_tol = 50. * dt_;                                                
+    double rel_drift   = std::abs(H_next - curr_state.H) / std::abs(curr_state.H); 
 
     if (rel_drift > H_tol) {
       unstable_      = true;
@@ -122,7 +122,7 @@ bool Simulation::evolve()
 }
 
 bool Simulation::evolveSteps(std::size_t add_steps)
-{ // "overload" of evolve
+{ 
   for (std::size_t i = 0; i < add_steps; ++i) {
     if (!evolve()) {
       return false;
@@ -132,7 +132,7 @@ bool Simulation::evolveSteps(std::size_t add_steps)
 }
 
 bool Simulation::evolveTime(double T)
-{ // "overload" of evolveSteps
+{ 
   if (T < 0) {
     throw std::invalid_argument("parameter T must be positive.");
   }

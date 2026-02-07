@@ -10,25 +10,25 @@ int main()
     lotka_volterra::Renderer ren   = io::inputRenderer();
     double T                       = io::inputTime(sim);
     std::size_t const max_steps    = static_cast<std::size_t>(T / sim.dt());
-    // direct input
+    // // direct input
     // lotka_volterra::Simulation sim = io::inputSimulation({0.001, 10., 6., 4., 12., 4., 3.});
     // lotka_volterra::Renderer ren   = io::inputRenderer(1000);
     // double T                       = 10.;
     // std::size_t const max_steps    = static_cast<std::size_t>(std::min(T / sim.dt(), 1e7)); // total simulation steps
-    // or
+    // // or
     // lotka_volterra::Simulation sim{0.001, 10., 6., 4., 12., 4., 3.};
     // lotka_volterra::Renderer ren{1000};
     // double T                    = 10.;
     // std::size_t const max_steps = static_cast<std::size_t>(std::min(T / sim.dt(), 1e7)); // total simulation steps
 
     sf::ContextSettings settings;
-    settings.antialiasingLevel = 8; // smooth trajectory
+    settings.antialiasingLevel = 8;
 
     sf::RenderWindow win(sf::VideoMode(static_cast<unsigned int>(ren.size()), static_cast<unsigned int>(ren.size())),
                          "Lotka-Volterra Simulation", sf::Style::Titlebar | sf::Style::Close, settings);
-    win.setFramerateLimit(240); // max frame rate
+    win.setFramerateLimit(240);
 
-    std::size_t frame = 0; // renderer frame
+    std::size_t frame = 0;
     bool title_set    = false;
 
     while (win.isOpen()) {
@@ -51,7 +51,7 @@ int main()
         ren.draw(win, sim, frame);
         ++frame;
       } else {
-        ren.draw(win, sim, sim.steps() - 1); // draw last valid state (avoid white window)
+        ren.draw(win, sim, sim.steps() - 1);
 
         if (!title_set) {
           if (sim.isUnstable())

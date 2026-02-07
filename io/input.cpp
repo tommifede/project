@@ -6,37 +6,37 @@
 namespace io {
 void trim(std::string& s)
 {
-  auto not_space = [](unsigned char c) { return !std::isspace(c); }; // lambda expression to identify a non-space character
+  auto not_space = [](unsigned char c) { return !std::isspace(c); }; 
 
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), not_space)); // erase first white spaces
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), not_space)); 
   s.erase(std::find_if(s.rbegin(), s.rend(), not_space).base(),
-          s.end()); // erase last white spaces; base() convert reverse iterator to (next) iterator
+          s.end()); 
 }
 
 double readDouble(std::string const& var, std::string const& prompt, double min, double max, bool strict)
 {
-  std::cout << prompt; // ask info
+  std::cout << prompt; 
   std::string input;
-  std::getline(std::cin, input); // get info to put in input
+  std::getline(std::cin, input); 
   trim(input);
 
   if (input.empty()) {
     throw std::invalid_argument(var + " input is empty.");
   }
 
-  double val; // type: double
+  double val; 
   auto [ptr, ec] =
-      std::from_chars(input.data(), input.data() + input.size(), val); // if totally non-numeric input, ec = std::errc::invalid_argument
+      std::from_chars(input.data(), input.data() + input.size(), val); 
 
   if (ec != std::errc{}) {
     throw std::invalid_argument("non-numeric input for " + var + ".");
   }
 
-  size_t idx; // length of the double value
+  size_t idx; 
   double value = std::stod(input, &idx);
 
   if (idx != input.size()) {
-    throw std::invalid_argument("non-numeric input for " + var + "."); // if partially non-numeric input, idx != input.size()
+    throw std::invalid_argument("non-numeric input for " + var + "."); 
   }
 
   if ((strict && value <= min) || (!strict && value < min)) {
@@ -151,7 +151,7 @@ double inputTime(lotka_volterra::Simulation const& sim)
 
   if (std::abs(n - std::round(n)) > 1e-8) {
     throw std::invalid_argument("T input must be multiple of dt.");
-  } // for floating-point rounding errors
+  } 
 
   return T;
 }
