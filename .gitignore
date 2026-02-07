@@ -23,8 +23,8 @@ __MACOSX/
 # Output
 *.csv
 
-# Course pdf
-pf2024.pdf
+# pdf
+*.pdf
 
 # Format files
 .clang-format
